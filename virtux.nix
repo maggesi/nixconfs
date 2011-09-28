@@ -5,7 +5,7 @@
 {pkgs, config, ...}:
 
 let
-  useVirtualboxVideo = false;
+  useVirtualboxVideo = true;
   texLivePaths = with pkgs; [
     texLive texLiveExtra texLiveCMSuper
     texLiveBeamer lmodern texLiveContext
