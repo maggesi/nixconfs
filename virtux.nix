@@ -11,7 +11,6 @@ let
     texLiveBeamer lmodern texLiveContext
   ];
   myTexLive = pkgs.texLiveAggregationFun { paths = texLivePaths; };
-  linuxPackages = pkgs.linuxPackages_2_6_32; # For BLCR
 in
 {
   boot = {
@@ -24,7 +23,7 @@ in
     loader.grub.device = "/dev/sda";
     initrd.kernelModules = [ "ata_piix" "fuse" ];
     initrd.enableSplashScreen = false;
-    kernelPackages = linuxPackages;
+    #kernelPackages = pkgs.linuxPackages_2_6_32; # For BLCR
   };
 
   fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
@@ -61,7 +60,7 @@ in
         default = "xfce";
         #default = "kde4";
         xfce.enable = true;
-        kde4.enable = true;
+        kde4.enable = false;
       };
       displayManager.auto = { enable = true; user = "maggesi"; };
 
@@ -94,12 +93,15 @@ in
 
     systemPackages = [
       pkgs.emacs
-      pkgs.firefox
-      #pkgs.mc
+      pkgs.firefoxWrapper
+      pkgs.chromeWrapper
+      pkgs.mc
       #pkgs.openoffice
-      pkgs.screen
+      #pkgs.screen
       pkgs.subversion
-      pkgs.adobeReader
+      #pkgs.adobeReader
+      #pkgs.fossil
+      #pkgs.coq
 
       # Xmonad/dwm related
       # pkgs.dwm pkgs.dmenu
@@ -119,7 +121,7 @@ in
   };
 
   security = {
-    extraSetuidPrograms = [ "reboot" "halt" ];
+    setuidPrograms = [ "reboot" "halt" ];
     sudo.enable = true;
   };
 
