@@ -26,13 +26,53 @@
   };
 
   environment = {
-    systemPackages = [
-      pkgs.emacs
-      pkgs.screen
-      pkgs.mosh
+    systemPackages = with pkgs; [
+      emacs screen mosh
+      mercurial darcs git fossil
+      ocaml
+      coq
     ];
   };
 
-services.openssh.enable = true;
+  services.locate.enable = true;
+  services.locate.period = "40 3 * * *";
+  services.openssh.enable = true;
+
+
+
+
+  services.openafsClient = {
+      enable = false;
+      cellName = "math.unifi.it";
+    };
+  services.postgresql.enable = true;
+
+  services.httpd = {
+      enable = true;
+      hostName = "localhost";
+      adminAddr = "maggesi@math.unifi.it";
+      documentRoot = "/var/www";
+      enableUserDir = true;
+      /*
+      servedDirs = [
+        { dir = "/home/maggesi/Devel"; urlPath = "/devo"; }
+        { dir = "/nix/store"; urlPath = "/store"; }
+      ];
+      extraModules = [
+        { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
+      ];
+      extraConfig = ''
+        ScriptAlias /cgi-bin/ /var/www/cgi-bin/
+      '';
+      */
+    };
+
+  time.timeZone = "Europe/Rome";
+
+  krb5.enable = false;
+  krb5.defaultRealm = "MATH.UNIFI.IT";
+  krb5.kdc = "kerberos.math.unifi.it";
+  krb5.kerberosAdminServer = "kerberos.math.unifi.it";
+
 
 }
