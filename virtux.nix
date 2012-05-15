@@ -23,7 +23,7 @@ in
     loader.grub.device = "/dev/sda";
     initrd.kernelModules = [ "ata_piix" "fuse" ];
     initrd.enableSplashScreen = false;
-    #kernelPackages = pkgs.linuxPackages_2_6_32; # For BLCR
+    kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR
   };
 
   fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
