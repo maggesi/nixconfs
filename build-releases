@@ -1,0 +1,4 @@
+#!/bin/sh
+nix-build -o neve-sys   -A system -I configuration=/etc/nixos/z77z/neve/configuration.nix release.nix --show-trace
+nix-build -o virtux-sys -A system -I configuration=/etc/nixos/z77z/virtux.nix release.nix --show-trace
+nix-build -o dolly-sys  -A system -I configuration=/etc/nixos/z77z/dolly.nix release.nix --show-trace
