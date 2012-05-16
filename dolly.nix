@@ -4,7 +4,7 @@
   require = [ "${modulesPath}/virtualisation/xen-domU.nix" ];
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
-  swapDevices = [ { device = "/dev/xvdb1"; } ];
+  swapDevices = [ { device = "/dev/xvda1"; } ];
   
   networking = {
     hostName = "dolly";
