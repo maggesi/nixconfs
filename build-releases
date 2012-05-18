@@ -1,4 +1,11 @@
 #!/bin/sh
-nix-build -o neve-sys   -A system -I configuration=/etc/nixos/z77z/neve/configuration.nix release.nix --show-trace
-nix-build -o virtux-sys -A system -I configuration=/etc/nixos/z77z/virtux.nix release.nix --show-trace
-nix-build -o dolly-sys  -A system -I configuration=/etc/nixos/z77z/dolly.nix release.nix --show-trace
+
+NIX_PATH=
+
+nix-build \
+  -o systems-result \
+  -I configuration=/etc/nixos/systems/elio.nix \
+  -I nixpkgs=/etc/nixos/nixpkgs/ \
+  -I nixos=/etc/nixos/nixos/ \
+  release.nix \
+  --show-trace
