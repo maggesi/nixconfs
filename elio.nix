@@ -2,6 +2,7 @@
 
 let
   hydrapkg = /nix/store/v70gk4mjqkyp2l4k73pxrbixinvzzsxr-hydra-0.1pre1051-4ad8912;
+  #hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
 in
 {
   require = [
@@ -35,7 +36,9 @@ in
   environment.systemPackages =
     with pkgs;
     [ emacs screen mosh
-      mercurial darcs git fossil mtr
+      #emacsPackages.magit
+      #emacsPackages.ocamlMode
+      mercurial darcs gitFull fossil mtr
       lynx links w3m
       ocaml coq
       pkgs.firefoxWrapper
@@ -45,7 +48,7 @@ in
   services.hydra = {
     enable = true;
     hydra = hydrapkg;
-    #hydraURL = https://elio.math.unifi.it/;
+    hydraURL = "http://elio.math.unifi.it/";
     notificationSender = "maggesi@math.unifi.it";
     user = "hydra";
     baseDir = "/home/hydra";
@@ -60,7 +63,7 @@ in
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
 
-  services.openafsClient.enable = true;
+  #services.openafsClient.enable = true;
   services.openafsClient.cellName = "math.unifi.it";
 
   services.postgresql.enable = true;
@@ -72,8 +75,8 @@ in
     documentRoot = "/var/www";
 
     #enableSSL = true;
-    sslServerCert = "/root/ssl-secrets/elio.crt";
-    sslServerKey = "/root/ssl-secrets/elio.key";
+    #sslServerCert = "/root/ssl-secrets/elio.crt";
+    #sslServerKey = "/root/ssl-secrets/elio.key";
 
     enableUserDir = true;
 
@@ -83,17 +86,20 @@ in
     ];
 
     extraConfig = ''
-       #RewriteEngine on
-       #RewriteRule ^/(.*) http://localhost:3000/$1 [P,L] 
-    '';
+        ProxyPreserveHost on
+        RewriteEngine on
+        RewriteRule ^/(.*) http://localhost:3000/$1 [P,L] 
+     ''; 
   };
 
   time.timeZone = "Europe/Rome";
 
-  krb5.enable = true;
+  #krb5.enable = true;
   krb5.defaultRealm = "MATH.UNIFI.IT";
   krb5.kdc = "kerberos.math.unifi.it";
   krb5.kerberosAdminServer = "kerberos.math.unifi.it";
+
+  nix.maxJobs = 1;
 
   users.extraUsers =
     [ { name = "maggesi";
