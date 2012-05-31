@@ -1,8 +1,8 @@
 { config, pkgs, modulesPath, ... }:
 
 let
-  hydrapkg = /nix/store/v70gk4mjqkyp2l4k73pxrbixinvzzsxr-hydra-0.1pre1051-4ad8912;
-  #hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
+  #hydrapkg = /nix/store/v70gk4mjqkyp2l4k73pxrbixinvzzsxr-hydra-0.1pre1051-4ad8912;
+  hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
 
   nixosVHostConfig = {
     hostName = "elio.math.unifi.it";
@@ -52,9 +52,17 @@ let
 in
 {
   require = [
-    "${modulesPath}/virtualisation/xen-domU.nix"
+    #"${modulesPath}/virtualisation/xen-domU.nix"
     ./modules/hydra.nix
   ];
+
+  boot.loader.grub = {
+    enable = true;
+    version = 2;
+    device = "/dev/xvda";
+  };
+
+  #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];

@@ -3,10 +3,60 @@
 
 { config, pkgs, ... }:
 
-{
-  require =
-    [ ./hardware-configuration.nix    # Results of the hardware scan.
+let
+  hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
+
+  nixosVHostConfig = {
+    hostName = "o0dom0.math.unifi.it";
+    adminAddr = "maggesi@math.unifi.it";
+    documentRoot = "/var/www";
+    enableUserDir = true;
+    logFormat = ''"%h %l %u %t \"%r\" %>s %b %D"'';
+
+/*
+    servedDirs = [
+      { urlPath = "/tarballs";
+        dir = "/data/webserver/tarballs";
+      }
     ];
+
+    servedFiles = [
+      { urlPath = "/releases/css/releases.css";
+        file = releasesCSS;
+      }
+    ];
+*/
+
+      extraConfig = ''
+        TimeOut 900
+
+        <Proxy *>
+          Order deny,allow
+          Allow from all
+        </Proxy>
+
+        ProxyRequests     Off
+        ProxyPreserveHost On
+        ProxyPass         /  http://localhost:3000/ retry=5 disablereuse=on
+        ProxyPassReverse  /  http://localhost:3000/
+
+        <Location />
+          SetOutputFilter DEFLATE
+          BrowserMatch ^Mozilla/4\.0[678] no-gzip\
+          BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+          SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+          SetEnvIfNoCase Request_URI /api/ no-gzip dont-vary
+          SetEnvIfNoCase Request_URI /download/ no-gzip dont-vary
+        </Location>
+      '';
+    };
+
+in
+{
+  require = [
+    ../modules/hydra.nix
+    ./hardware-configuration.nix    # Results of the hardware scan.
+  ];
 
   #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
     
@@ -58,13 +108,86 @@
 
   environment.systemPackages =
     with pkgs;
-    [ diffutils file which gnumake
-      emacs mc mosh
+    [ emacs screen mosh
+      #emacsPackages.magit
+      #emacsPackages.ocamlMode
+      mercurial darcs gitFull fossil mtr
+      lynx links w3m
+      # ocaml
+      # coq
+      pkgs.firefoxWrapper
+      pkgs.chromeWrapper
+
+      diffutils file which gnumake
+      mc 
       # patch
-      screen subversion
-      links w3m lynx wget
+      subversion
+      links w3m wget
     ];
 
   #virtualisation.xen.enable = true;
   #virtualisation.xen.domain0MemorySize = 512;
+
+  services.hydra = {
+    enable = true;
+    hydra = hydrapkg;
+    hydraURL = "http://o0dom0.math.unifi.it/";
+    notificationSender = "maggesi@math.unifi.it";
+    user = "hydra";
+    baseDir = "/home/hydra";
+    dbi = "dbi:Pg:dbname=hydra;host=localhost;user=hydra;";
+    minimumDiskFree = 3;
+    minimumDiskFreeEvaluator = 1;
+    #tracker = "<div>Dipartimento di Matematica Ulisse Dini</div>";
+    autoStart = true;
+  };
+
+  services.locate.enable = true;
+  services.locate.period = "40 3 * * *";
+
+  services.postgresql.enable = true;
+
+  services.httpd = {
+    enable = true;
+    logPerVirtualHost = true;
+    adminAddr = "maggesi@math.unifi.it";
+    hostName = "localhost";
+
+    extraModules = [
+      #### Questi non servono, sono caricaty per default
+      # "rewrite" "proxy"
+    ];
+
+    extraConfig = ''
+       AddType application/nix-package .nixpkg
+    '';
+
+    virtualHosts = [
+      nixosVHostConfig
+
+      (nixosVHostConfig // {
+        enableSSL = true;
+        sslServerCert = "/root/ssl-secrets/server.crt";
+        sslServerKey = "/root/ssl-secrets/server.key";
+	extraConfig = nixosVHostConfig.extraConfig + ''
+          # Required by Catalyst.
+          RequestHeader set X-Forwarded-Port 443
+        '';
+      })
+
+     ];
+  };
+
+  time.timeZone = "Europe/Rome";
+
+  users.extraUsers = [
+    { name = "maggesi";
+      description = "Marco Maggesi";
+      home = "/home/maggesi";
+      group = "users";
+      extraGroups = [ "wheel" ];
+      createHome = true;
+      useDefaultShell = true;
+    }
+  ];
 }
