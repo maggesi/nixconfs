@@ -116,6 +116,7 @@ in
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
+  services.openssh.allowSFTP = true;
 
   #services.openafsClient.enable = true;
   services.openafsClient.cellName = "math.unifi.it";

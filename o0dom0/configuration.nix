@@ -104,6 +104,7 @@ in
 
   services.nixosManual.showManual = true;
   services.openssh.enable = true;
+  services.openssh.allowSFTP = true;
   services.gpm.enable = true;
 
   environment.systemPackages =
