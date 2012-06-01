@@ -1,59 +1,8 @@
 { config, pkgs, modulesPath, ... }:
 
-let
-  #hydrapkg = /nix/store/v70gk4mjqkyp2l4k73pxrbixinvzzsxr-hydra-0.1pre1051-4ad8912;
-  hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
-
-  nixosVHostConfig = {
-    hostName = "elio.math.unifi.it";
-    adminAddr = "maggesi@math.unifi.it";
-    documentRoot = "/var/www";
-    enableUserDir = true;
-    logFormat = ''"%h %l %u %t \"%r\" %>s %b %D"'';
-
-/*
-    servedDirs = [
-      { urlPath = "/tarballs";
-        dir = "/data/webserver/tarballs";
-      }
-    ];
-
-    servedFiles = [
-      { urlPath = "/releases/css/releases.css";
-        file = releasesCSS;
-      }
-    ];
-*/
-
-      extraConfig = ''
-        TimeOut 900
-
-        <Proxy *>
-          Order deny,allow
-          Allow from all
-        </Proxy>
-
-        ProxyRequests     Off
-        ProxyPreserveHost On
-        ProxyPass         /  http://localhost:3000/ retry=5 disablereuse=on
-        ProxyPassReverse  /  http://localhost:3000/
-
-        <Location />
-          SetOutputFilter DEFLATE
-          BrowserMatch ^Mozilla/4\.0[678] no-gzip\
-          BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
-          SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
-          SetEnvIfNoCase Request_URI /api/ no-gzip dont-vary
-          SetEnvIfNoCase Request_URI /download/ no-gzip dont-vary
-        </Location>
-      '';
-    };
-
-in
 {
   require = [
     #"${modulesPath}/virtualisation/xen-domU.nix"
-    ./modules/hydra.nix
   ];
 
   boot.loader.grub = {
@@ -99,20 +48,6 @@ in
       pkgs.chromeWrapper
     ];
 
-  services.hydra = {
-    enable = true;
-    hydra = hydrapkg;
-    hydraURL = "http://elio.math.unifi.it/";
-    notificationSender = "maggesi@math.unifi.it";
-    user = "hydra";
-    baseDir = "/home/hydra";
-    dbi = "dbi:Pg:dbname=hydra;host=localhost;user=hydra;";
-    minimumDiskFree = 3;
-    minimumDiskFreeEvaluator = 1;
-    #tracker = "<div>Dipartimento di Matematica Ulisse Dini</div>";
-    autoStart = true;
-  };
-
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
@@ -122,37 +57,6 @@ in
   services.openafsClient.cellName = "math.unifi.it";
 
   services.postgresql.enable = true;
-
-  services.httpd = {
-    enable = true;
-    logPerVirtualHost = true;
-    adminAddr = "maggesi@math.unifi.it";
-    hostName = "localhost";
-
-    extraModules = [
-      #### Questi non servono, sono caricaty per default
-      # "rewrite" "proxy"
-    ];
-
-    extraConfig = ''
-       AddType application/nix-package .nixpkg
-    '';
-
-    virtualHosts = [
-      nixosVHostConfig
-
-      (nixosVHostConfig // {
-        enableSSL = true;
-        sslServerCert = "/root/ssl-secrets/elio.crt";
-        sslServerKey = "/root/ssl-secrets/elio.key";
-	extraConfig = nixosVHostConfig.extraConfig + ''
-          # Required by Catalyst.
-          RequestHeader set X-Forwarded-Port 443
-        '';
-      })
-
-     ];
-  };
 
   time.timeZone = "Europe/Rome";
 
