@@ -41,11 +41,13 @@
     [ emacs screen mosh
       #emacsPackages.magit
       #emacsPackages.ocamlMode
-      mercurial darcs gitFull fossil mtr
+      mercurial darcs fossil mtr
+      gitAndTools.gitFull
+      gitAndTools.gitAnnex
       lynx links w3m
       ocaml coq
-      pkgs.firefoxWrapper
-      pkgs.chromeWrapper
+      firefoxWrapper
+      chromeWrapper
     ];
 
   services.locate.enable = true;
