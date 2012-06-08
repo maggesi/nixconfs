@@ -97,9 +97,10 @@ in
       pkgs.chromeWrapper
       pkgs.mc
       #pkgs.openoffice
-      #pkgs.screen
+      pkgs.screen
       pkgs.subversion
-      #pkgs.adobeReader
+      pkgs.gitFull
+      pkgs.adobeReader
       #pkgs.fossil
       #pkgs.coq
 
