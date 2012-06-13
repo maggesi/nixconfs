@@ -91,30 +91,21 @@ in
     #acpid.enable = true;
     blcr.enable = true;
 
-    systemPackages = [
-      pkgs.emacs
-      pkgs.firefoxWrapper
-      pkgs.chromeWrapper
-      pkgs.mc
-      #pkgs.openoffice
-      pkgs.screen
-      pkgs.subversion
-      pkgs.gitFull
-      pkgs.adobeReader
-      #pkgs.fossil
-      #pkgs.coq
-
-      # Xmonad/dwm related
-      # pkgs.dwm pkgs.dmenu
-      # pkgs.dwmstatus
-      # pkgs.tabbed
-      # pkgs.surf
-      # pkgs.urxvt
-      # pkgs.haskellPackages.xmonadContrib
-
-      #myTexLive
-      config.boot.kernelPackages.virtualboxGuestAdditions
-    ];
+    systemPackages =
+      with pkgs;
+      [
+        emacs
+        firefoxWrapper
+        chromeWrapper
+        screen
+        mc
+        adobeReader
+        fossil
+        subversion
+	gitAndTools.gitFull
+	gitAndTools.gitAnnex
+        bup
+      ];
 
     kdePackages = [] ++ (if useVirtualboxVideo then [
       config.boot.kernelPackages.virtualboxGuestAdditions
