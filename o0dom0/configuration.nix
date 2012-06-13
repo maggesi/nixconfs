@@ -114,7 +114,7 @@ in
 
   environment.systemPackages =
     with pkgs;
-    [ emacs screen mosh
+    [ emacs screen mosh tmux
       #emacsPackages.magit
       #emacsPackages.ocamlMode
       mercurial darcs fossil mtr
