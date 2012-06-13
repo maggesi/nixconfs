@@ -43,7 +43,7 @@
       #emacsPackages.ocamlMode
       mtr
       mercurial darcs fossil
-      gitFull gitAnnex
+      gitAndTools.gitFull gitAndTools.gitAnnex
       lynx links w3m
       ocaml coq
       firefoxWrapper
