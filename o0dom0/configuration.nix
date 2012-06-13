@@ -58,6 +58,11 @@ in
     ./hardware-configuration.nix    # Results of the hardware scan.
   ];
 
+  environment.shellInit = ''
+    export HYDRA_DATA=/home/hydra/data
+    export HYDRA_DBI="dbi:Pg:dbname=hydra;host=localhost;user=hydra;";
+  '';
+
   #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
     
   boot.loader.grub.enable = true;
