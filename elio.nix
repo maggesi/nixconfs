@@ -41,9 +41,9 @@
     [ emacs screen mosh
       #emacsPackages.magit
       #emacsPackages.ocamlMode
-      mercurial darcs fossil mtr
-      gitAndTools.gitFull
-      gitAndTools.gitAnnex
+      mtr
+      mercurial darcs fossil
+      gitFull gitAnnex
       lynx links w3m
       ocaml coq
       firefoxWrapper
