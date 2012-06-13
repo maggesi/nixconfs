@@ -2,16 +2,8 @@
 
 {
   require = [
-    #"${modulesPath}/virtualisation/xen-domU.nix"
+    "${modulesPath}/virtualisation/xen-domU.nix"
   ];
-
-  boot.loader.grub = {
-    enable = true;
-    version = 2;
-    device = "/dev/xvda";
-  };
-
-  #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];
@@ -38,7 +30,7 @@
 
   environment.systemPackages =
     with pkgs;
-    [ emacs screen mosh
+    [ emacs screen mosh tmux
       #emacsPackages.magit
       #emacsPackages.ocamlMode
       mtr
