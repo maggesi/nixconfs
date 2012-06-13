@@ -45,7 +45,7 @@ in
     */
   };
 
-  environment = {
+  environment = with pkgs; {
     systemPackages = [
       pkgs.emacs
       pkgs.firefoxWrapper
@@ -55,6 +55,9 @@ in
       pkgs.subversion
       pkgs.texmacs
       myTexLive
+
+      gitAndTools.gitFull
+      gitAndTools.gitAnnex
 
       pkgs.gnumake
       pkgs.diffutils
