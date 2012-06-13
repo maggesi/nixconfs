@@ -45,58 +45,61 @@ in
     */
   };
 
-  environment = with pkgs; {
-    systemPackages = [
-      pkgs.emacs
-      pkgs.firefoxWrapper
-      pkgs.chromeWrapper
-      pkgs.mc
-      pkgs.screen
-      pkgs.subversion
-      pkgs.texmacs
-      myTexLive
+  environment = {
+    systemPackages =
+      with pkgs;
+      [
+        emacs
+        firefoxWrapper
+        chromeWrapper
+        screen
+        mc
 
-      gitAndTools.gitFull
-      gitAndTools.gitAnnex
+        gnumake
+        diffutils
+        file
+        patch
+        which
 
-      pkgs.gnumake
-      pkgs.diffutils
-      pkgs.file
-      pkgs.manpages
-      pkgs.patch
-      pkgs.which
+        subversion
+        gitAndTools.gitFull
+        gitAndTools.gitAnnex
+        #bup
 
-      # Science/logic
-      pkgs.coq
-      pkgs.cvc3
-      pkgs.eprover
-      pkgs.hol
-      pkgs.hol_light
-      pkgs.iprover
-      pkgs.isabelle
-      pkgs.leo2
-      pkgs.matita
-      pkgs.minisat
-      pkgs.opensmt
-      pkgs.prover9
-      pkgs.satallax
-      pkgs.spass
+        texmacs
+        myTexLive
 
-      # Science/math
-      #pkgs.content
-      pkgs.maxima
-      pkgs.pari
-      #pkgs.scilab
-      pkgs.singular
-      pkgs.wxmaxima
-      pkgs.yacas      
+        # Science/logic
+        coq
+        cvc3
+        eprover
+        hol
+        hol_light
+        iprover
+        isabelle
+        leo2
+        matita
+        minisat
+        opensmt
+        prover9
+        satallax
+        spass
 
-      # OCaml
-      pkgs.ocamlPackages_3_12_1.ocaml
-      pkgs.ocamlPackages_3_12_1.findlib
-      pkgs.ocamlPackages_3_12_1.ounit
-      pkgs.ocamlPackages_3_12_1.camlp5_strict
-    ];
+        # Science/math
+        #pkgs.content
+        maxima
+        pari
+        #pkgs.scilab
+        singular
+        wxmaxima
+        yacas
+
+        # OCaml
+        ocamlPackages.ocaml
+        ocamlPackages.findlib
+        ocamlPackages.ounit
+        ocamlPackages.camlp5_strict
+      ];
 
 /*
     kdePackages = with pkgs.kde4; [
