@@ -104,7 +104,7 @@ in
         subversion
 	gitAndTools.gitFull
 	gitAndTools.gitAnnex
-        bup
+        #bup
       ];
 
     kdePackages = [] ++ (if useVirtualboxVideo then [
