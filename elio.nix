@@ -38,8 +38,8 @@
       gitAndTools.gitFull gitAndTools.gitAnnex
       lynx links w3m
       ocaml coq
-      firefoxWrapper
-      chromeWrapper
+      #firefoxWrapper
+      #chromeWrapper
     ];
 
   services.locate.enable = true;

@@ -124,8 +124,8 @@ in
       lynx links w3m
       # ocaml
       # coq
-      pkgs.firefoxWrapper
-      pkgs.chromeWrapper
+      #pkgs.firefoxWrapper
+      #pkgs.chromeWrapper
 
       diffutils file which gnumake
       mc 
