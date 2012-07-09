@@ -96,7 +96,7 @@ in
       [
         emacs
         firefoxWrapper
-        chromeWrapper
+        #chromeWrapper
         screen
         mc
         adobeReader
