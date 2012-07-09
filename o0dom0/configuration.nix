@@ -5,7 +5,7 @@
 
 let
   #hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
-  hydrapkg = /nix/store/i2fp402jvl9hs2l5r033bm9vscl5g0kj-hydra-0.1pre1074-1b3cf68
+  hydrapkg = /nix/store/i2fp402jvl9hs2l5r033bm9vscl5g0kj-hydra-0.1pre1074-1b3cf68;
 
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
