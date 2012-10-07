@@ -4,8 +4,8 @@
 { config, pkgs, ... }:
 
 let
-  #hydrapkg = /nix/store/2a49h1zc3cydy97dyrv3ycfia087wwcy-hydra-0.1pre1058-fdf441a;
-  hydrapkg = /nix/store/i2fp402jvl9hs2l5r033bm9vscl5g0kj-hydra-0.1pre1074-1b3cf68;
+  #hydrapkg = /nix/store/i2fp402jvl9hs2l5r033bm9vscl5g0kj-hydra-0.1pre1074-1b3cf68;
+  hydrapkg = /nix/store/8p0c4kgpvc269skvfqwimmmjqaqi586z-hydra-0.1pre1086-396a356;
 
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
@@ -13,20 +13,6 @@ let
     documentRoot = "/var/www";
     enableUserDir = true;
     logFormat = ''"%h %l %u %t \"%r\" %>s %b %D"'';
-
-/*
-    servedDirs = [
-      { urlPath = "/tarballs";
-        dir = "/data/webserver/tarballs";
-      }
-    ];
-
-    servedFiles = [
-      { urlPath = "/releases/css/releases.css";
-        file = releasesCSS;
-      }
-    ];
-*/
 
       extraConfig = ''
         TimeOut 900
@@ -92,7 +78,7 @@ in
 
   fileSystems =
     [ { mountPoint = "/";
-#        device = "/dev/disk/by-label/nixos";
+#       device = "/dev/disk/by-label/nixos";
         device = "/dev/disk/by-label/store";
       }
 
@@ -163,7 +149,7 @@ in
     hostName = "localhost";
 
     extraModules = [
-      #### Questi non servono, sono caricaty per default
+      #### Questi non servono, sono caricati per default
       # "rewrite" "proxy"
     ];
 
