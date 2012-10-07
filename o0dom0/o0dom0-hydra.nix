@@ -50,8 +50,6 @@ in
     export HYDRA_DBI="dbi:Pg:dbname=hydra;host=localhost;user=hydra;";
   '';
 
-  #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
-    
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
@@ -119,9 +117,6 @@ in
       subversion
       links w3m wget
     ];
-
-  #virtualisation.xen.enable = true;
-  #virtualisation.xen.domain0MemorySize = 512;
 
   services.hydra = {
     enable = true;
