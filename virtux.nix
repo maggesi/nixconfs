@@ -18,7 +18,7 @@ in
     # The follwoing kernel params are needed when VirtualBox Guest
     # Additions do not work to set up a convenient screen size (see
     # also below in the configuration of xorg).
-    extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
+    #extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
 
     loader.grub.device = "/dev/sda";
     initrd.kernelModules = [ "ata_piix" "fuse" ];
@@ -96,7 +96,6 @@ in
       [
         emacs
         firefoxWrapper
-        #chromeWrapper
         screen
         mc
         adobeReader
@@ -104,7 +103,6 @@ in
         subversion
 	gitAndTools.gitFull
 	gitAndTools.gitAnnex
-        #bup
       ];
 
     kdePackages = [] ++ (if useVirtualboxVideo then [
