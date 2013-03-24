@@ -17,8 +17,9 @@
 
     miscEnv = pkgs.buildEnv
       { name = "misc-env";
-        paths = with pkgs;
-          [ mc file which coreutils ocaml coq ];
+        paths = with pkgs; [
+	  coreutils diffutils findutils file which
+        ];
       };
   };
 }
