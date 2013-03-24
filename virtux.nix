@@ -39,10 +39,6 @@
     locate.enable = true;
     locate.period = "40 3 * * *";
 
-    # postgresql.enable = true;
-    # openssh.enable = false;
-    # atd.enable = false;
-
     xserver = {
       enable = true;
       exportConfiguration = true;
