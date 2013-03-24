@@ -4,16 +4,8 @@
 
 {pkgs, config, ...}:
 
-let
-  texLivePaths = with pkgs; [
-    texLive texLiveExtra texLiveCMSuper
-    texLiveBeamer lmodern texLiveContext
-  ];
-  myTexLive = pkgs.texLiveAggregationFun { paths = texLivePaths; };
-in
 {
   boot = {
-
     # The follwoing kernel params are needed when VirtualBox Guest
     # Additions do not work to set up a convenient screen size (see
     # also below in the configuration of xorg).
@@ -68,7 +60,7 @@ in
   };
 
   environment = {
-    #acpid.enable = true;
+    acpid.enable = true;
     blcr.enable = true;
   };
 
