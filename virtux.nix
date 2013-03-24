@@ -59,10 +59,7 @@
     };
   };
 
-  environment = {
-    acpid.enable = true;
-    blcr.enable = true;
-  };
+  environment.blcr.enable = true;
 
   security = {
     setuidPrograms = [ "reboot" "halt" ];
