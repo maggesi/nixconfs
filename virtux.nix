@@ -69,12 +69,6 @@
     sudo.enable = true;
   };
 
-  nixpkgs.config = {
-    git.guiSupport = true;
-    git.svnSupport = true;
-    subversion.perlBindings = true;
-  };
-
   users.extraUsers = [
     { description = "Marco Maggesi";
       name = "maggesi";
