@@ -23,7 +23,7 @@ in
     loader.grub.device = "/dev/sda";
     initrd.kernelModules = [ "ata_piix" "fuse" ];
     initrd.enableSplashScreen = false;
-    kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR
+    #kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
   };
 
   fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
@@ -90,24 +90,6 @@ in
   environment = {
     #acpid.enable = true;
     blcr.enable = true;
-
-    systemPackages =
-      with pkgs;
-      [
-        emacs
-        firefoxWrapper
-        screen
-        mc
-        adobeReader
-        fossil
-        subversion
-	gitAndTools.gitFull
-	gitAndTools.gitAnnex
-      ];
-
-    kdePackages = [] ++ (if useVirtualboxVideo then [
-      config.boot.kernelPackages.virtualboxGuestAdditions
-    ] else []);
   };
 
   security = {
