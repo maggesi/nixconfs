@@ -1,4 +1,4 @@
-/* ========================================================================= */
+nixos-hardware-scan/* ========================================================================= */
 /* Configuration file for "virtux", virtualbox guest on "soyouz" MacBookPro  */
 /* ========================================================================= */
 
@@ -11,7 +11,10 @@
     # also below in the configuration of xorg).
     #extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
 
+    loader.grub.enable = true;
+    loader.grub.version = 2;
     loader.grub.device = "/dev/sda";
+
     initrd.kernelModules = [ "ata_piix" "fuse" ];
     initrd.enableSplashScreen = false;
     #kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
