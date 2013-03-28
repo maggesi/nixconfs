@@ -76,7 +76,6 @@
   services.xserver.xkbOptions = "eurosign:e";
 
   # X11 non funziona, proviamo ad aggiungere qualche conf.
-  services.xserver.videoDriver = "nvidia";
   services.xserver.desktopManager.default = "kde4";
   #services.xserver.desktopManager.default = "xfce";
 

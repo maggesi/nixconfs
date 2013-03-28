@@ -12,4 +12,6 @@
   boot.extraModulePackages = [ ];
 
   nix.maxJobs = 4;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
 }
