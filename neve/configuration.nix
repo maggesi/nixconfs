@@ -4,183 +4,113 @@
 
 { pkgs, config, ...}:
 
-let
-  texLivePaths = with pkgs; [
-    texLive texLiveExtra texLiveCMSuper
-    texLiveBeamer lmodern texLiveContext
-  ];
-  myTexLive = pkgs.texLiveAggregationFun { paths = texLivePaths; };
-in
 {
-  boot = {
-    loader.grub.enable = true;
-    loader.grub.device = "/dev/sdb3";
-    #initrd.kernelModules = [];
-    kernelPackages = pkgs.linuxPackages_2_6_35;
-    #kernelPackages = pkgs.linuxPackages_2_6_32_xen;
-    initrd.enableSplashScreen = false;
-  };
-
-  fileSystems = [
-    { label = "nixos"; mountPoint = "/"; }
-    { device = "/dev/sdb1"; mountPoint = "/mnt/ubuntu"; }
-    { device = "/dev/sda1"; mountPoint = "/mnt/windows"; }
-  ];
-
-  swapDevices = [ { label = "swap"; } ];
-
-  networking = {
-    hostName = "neve";
-    nameservers = [ "150.217.33.11" "150.217.1.32" ];
-    defaultMailServer.directDelivery = true;
-    defaultMailServer.hostName = "mail.math.unifi.it";
-    /*
-    useDHCP = false;
-    interfaces = [ {
-      name = "eth0";
-      ipAddress = "150.217.33.145";
-      subnetMask = "255.255.255.0";
-    } ];
-    defaultGateway = "150.217.33.1";
-    */
-  };
-
-  environment = {
-    systemPackages =
-      with pkgs;
-      [
-        emacs
-        firefoxWrapper
-        chromeWrapper
-        screen
-        mc
-
-        gnumake
-        diffutils
-        file
-        patch
-        which
-
-        subversion
-        gitAndTools.gitFull
-        gitAndTools.gitAnnex
-        #bup
-
-        texmacs
-        myTexLive
-
-        # Science/logic
-        coq
-        cvc3
-        eprover
-        hol
-        hol_light
-        iprover
-        isabelle
-        leo2
-        matita
-        minisat
-        opensmt
-        prover9
-        satallax
-        spass
-
-        # Science/math
-        #pkgs.content
-        maxima
-        pari
-        #pkgs.scilab
-        singular
-        wxmaxima
-        yacas
-
-        # OCaml
-        ocamlPackages.ocaml
-        ocamlPackages.findlib
-        ocamlPackages.ounit
-        ocamlPackages.camlp5_strict
-      ];
-
-/*
-    kdePackages = with pkgs.kde4; [
-      kdeadmin kdeartwork kdebindings kdeedu kdegraphics kdemultimedia
-      kdenetwork kdepim
-      kdeplasma_addons kdetoys kdeutils
+  require =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
     ];
-*/
 
-    blcr = {
-      enable = true;
-      autorun = true;
-    };
+  boot.initrd.kernelModules =
+    [ # Specify all kernel modules that are necessary for mounting the root
+      # filesystem.
+      # "xfs" "ata_piix"
+    ];
 
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+
+  # Define on which hard drive you want to install Grub.
+  boot.loader.grub.device = "/dev/sda";
+
+  #boot.kernelPackages = pkgs.linuxPackages_2_6_35;
+  boot.initrd.enableSplashScreen = false;
+
+  #hardware.enableAllFirmware = true;
+
+  networking.hostName = "neve"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables Wireless.
+
+  networking.defaultMailServer.directDelivery = true;
+  networking.defaultMailServer.hostName = "mail.math.unifi.it";
+
+  # Add filesystem entries for each partition that you want to see
+  # mounted at boot time.  This should include at least the root
+  # filesystem.
+  fileSystems =
+    [ { mountPoint = "/";
+	    label = "nixos";
+        #device = "/dev/disk/by-label/nixos";
+      }
+    ];
+
+  # List swap partitions activated at boot time.
+  swapDevices =
+    [ {
+	    #device = "/dev/disk/by-label/swap";
+	    label = "swap";
+	  }
+    ];
+
+  # Select internationalisation properties.
+  i18n = {
+    consoleFont = "lat9w-16";
+    consoleKeyMap = "us";
+    defaultLocale = "en_US.UTF-8";
   };
 
-  nix = {
-    maxJobs = 3;
+  # List services that you want to enable:
 
-    extraOptions = ''
-      gc-keep-outputs = true
-      gc-keep-derivations = true
-    '';
+  # Enable the OpenSSH daemon.
+  services.openssh.enable = true;
 
-    useChroot = false;
-  };
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+  services.printing.drivers = [ pkgs.splix ];
 
-  nixpkgs.config = {
-    git.guiSupport = true;
-    git.svnSupport = true;
-    subversion.perlBindings = true;
-    firefox = {
-      enableRealPlayer = true;
-      jre = true;
-    };
-  };
+  services.ttyBackgrounds.enable = false;
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  services.xserver.layout = "us";
+  services.xserver.xkbOptions = "eurosign:e";
+
+  # X11 non funziona, proviamo ad aggiungere qualche conf.
+  services.xserver.videoDriver = "nvidia";
+  services.xserver.desktopManager.default = "kde4";
+  #services.xserver.desktopManager.default = "xfce";
+
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.kdm.enable = true;
+  services.xserver.desktopManager.kde4.enable = true;
+  services.xserver.desktopManager.xfce.enable = true;
+
+  services.locate.enable = true;
+  services.locate.period = "40 3 * * *";
+
+  services.gpm.enable = true;
+
+  #services.openafsClient.enable = true;
+  #services.openafsClient.cellName = "math.unifi.it";
+
+  security.setuidPrograms = [ "reboot" "halt" ];
 
   powerManagement.enable = true;
 
-  services = {
-    acpid.enable = true;
-    openssh.enable = true;
-    # atd.enable = false;
-
-    locate.enable = true;
-    locate.period = "40 3 * * *";
-
-    gpm.enable = true;
-    printing.enable = true; # http://localhost:631/ per configurare.
-
-    xserver = {
-      enable = true;
-      exportConfiguration = true;
-      #desktopManager.default = "kde4";
-      desktopManager.default = "xfce";
-      desktopManager.kde4.enable = true;
-      desktopManager.xfce.enable = true;
-      driSupport = true;
-    };
-
-    openafsClient = {
-      enable = true;
-      cellName = "math.unifi.it";
-    };
-
-    ttyBackgrounds.enable = false;
-  };
-
-  security.setuidPrograms = [
-    "reboot"
-    "halt"
-  ];
   time.timeZone = "Europe/Rome";
 
+  environment.blcr.enable = true;
+
+  /*
   krb5 = {
     enable = true;
     defaultRealm = "MATH.UNIFI.IT";
     kdc = "kerberos.math.unifi.it";
     kerberosAdminServer = "kerberos.math.unifi.it";
   };
+  */
 
+  /*
   users.extraUsers = [
     {
       name = "maggesi";
@@ -192,6 +122,7 @@ in
       useDefaultShell = true;
     }
   ];
+  */
 
   #virtualisation.xen.enable = true;
   #virtualisation.xen.domain0MemorySize = 640;
