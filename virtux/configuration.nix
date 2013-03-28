@@ -1,24 +1,32 @@
-nixos-hardware-scan/* ========================================================================= */
+/* ========================================================================= */
 /* Configuration file for "virtux", virtualbox guest on "soyouz" MacBookPro  */
 /* ========================================================================= */
 
 {pkgs, config, ...}:
 
 {
-  boot = {
-    # The follwoing kernel params are needed when VirtualBox Guest
-    # Additions do not work to set up a convenient screen size (see
-    # also below in the configuration of xorg).
-    #extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
+  require =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
 
-    loader.grub.enable = true;
-    loader.grub.version = 2;
-    loader.grub.device = "/dev/sda";
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
 
-    initrd.kernelModules = [ "ata_piix" "fuse" ];
-    initrd.enableSplashScreen = false;
-    #kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
-  };
+  boot.initrd.enableSplashScreen = false;
+  boot.initrd.kernelModules =
+    [ # Specify all kernel modules that are necessary for mounting the root
+      # filesystem.
+      # "xfs" "ata_piix"
+    ];
+
+  #boot.kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
+
+  # The follwoing kernel params are needed when VirtualBox Guest
+  # Additions do not work to set up a convenient screen size (see
+  # also below in the configuration of xorg).
+  #boot.extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
 
   fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
   swapDevices = [ { label = "swap"; } ];
@@ -34,8 +42,6 @@ nixos-hardware-scan/* ==========================================================
   nix.maxJobs = 1;
 
   services = {
-    virtualbox.enable = true;
-
     gpm.enable = true;
     ttyBackgrounds.enable = false;
 
