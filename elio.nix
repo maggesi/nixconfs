@@ -2,7 +2,8 @@
 
 {
   require = [
-    "${modulesPath}/virtualisation/xen-domU.nix"
+    # "${modulesPath}/virtualisation/xen-domU.nix"
+    ./xen-domU.nix
   ];
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
@@ -50,7 +51,7 @@
   #services.openafsClient.enable = true;
   services.openafsClient.cellName = "math.unifi.it";
 
-  services.postgresql.enable = true;
+  services.postgresql.enable = false;
 
   time.timeZone = "Europe/Rome";
 
