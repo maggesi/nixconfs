@@ -23,7 +23,8 @@
       
     useDHCP = false;
     interfaces =
-      [ { name = "eth0";
+      [ { #name = "eth0";
+          name = "enp2s0";
           ipAddress = "150.217.34.247";
           subnetMask = "255.255.255.128";
         }

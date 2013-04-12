@@ -4,8 +4,8 @@
 { config, pkgs, ... }:
 
 let
-  #hydrapkg = /nix/store/i2fp402jvl9hs2l5r033bm9vscl5g0kj-hydra-0.1pre1074-1b3cf68;
-  hydrapkg = /nix/store/8p0c4kgpvc269skvfqwimmmjqaqi586z-hydra-0.1pre1086-396a356;
+  #hydrapkg = /nix/store/3pflwisfd0xwgrxm0xbbv0lw327vj4sk-hydra-0.1pre1097-6439999;
+  hydrapkg = /nix/store/0vhipvjzq60aab5nc8lgvwfwy69v71wg-hydra-0.1pre1097-6439999;
 
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
@@ -63,7 +63,8 @@ in
       
     useDHCP = false;
     interfaces =
-      [ { name = "eth0";
+      [ { #name = "eth0";
+          name = "enp2s0";
           ipAddress = "150.217.34.247";
           subnetMask = "255.255.255.128";
         }
