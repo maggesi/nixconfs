@@ -73,8 +73,8 @@
       links w3m wget
     ];
 
-  virtualisation.xen.enable = true;
-  virtualisation.xen.domain0MemorySize = 512;
+  #virtualisation.xen.enable = true;
+  #virtualisation.xen.domain0MemorySize = 512;
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
