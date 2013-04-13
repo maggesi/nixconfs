@@ -4,8 +4,9 @@
 { config, pkgs, ... }:
 
 let
-  #hydrapkg = /nix/store/3pflwisfd0xwgrxm0xbbv0lw327vj4sk-hydra-0.1pre1097-6439999;
-  hydrapkg = /nix/store/0vhipvjzq60aab5nc8lgvwfwy69v71wg-hydra-0.1pre1097-6439999;
+  # hydrapkg = /nix/store/0vhipvjzq60aab5nc8lgvwfwy69v71wg-hydra-0.1pre1097-6439999;
+  # hydrapkg = /nix/store/7vlizjmz662s6pifyh596n3b5zacy7iv-hydra-0.1pre1271-9f027b2;
+  hydrapkg = /nix/store/chdvwyw98yj1w2nny3mgh40c37x5cp2k-hydra-0.1pre1271-9f027b2;
 
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
@@ -121,7 +122,7 @@ in
 
   services.hydra = {
     enable = true;
-    hydra = hydrapkg;
+    # hydra = hydrapkg;
     hydraURL = "http://o0dom0.math.unifi.it/";
     notificationSender = "maggesi@math.unifi.it";
     user = "hydra";
@@ -130,13 +131,13 @@ in
     minimumDiskFree = 3;
     minimumDiskFreeEvaluator = 1;
     #tracker = "<div>Dipartimento di Matematica Ulisse Dini</div>";
-    autoStart = true;
   };
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
 
   services.postgresql.enable = true;
+  services.postgresql.package = pkgs.postgresql83;
 
   services.httpd = {
     enable = true;
