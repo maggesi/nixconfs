@@ -15,7 +15,6 @@ in
   elio = (eval ./elio.nix).config.system.build.toplevel;
   neve = (eval ./neve/configuration.nix).config.system.build.toplevel;
   o0dom0 = (eval ./o0dom0/o0dom0-hydra.nix).config.system.build.toplevel;
-  o0dom0_xen = (eval ./o0dom0/o0dom0-xen.nix).config.system.build.toplevel;
   virtux = (eval ./virtux/configuration.nix).config.system.build.toplevel;
   holinux = (eval ./holinux/holinux.nix).config.system.build.toplevel;
 }
