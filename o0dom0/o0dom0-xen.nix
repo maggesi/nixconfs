@@ -1,12 +1,11 @@
 # o0dom0 system.  Help is available in the configuration.nix(5) man page
 # or the NixOS manual available on virtual console 8 (Alt+F8).
 
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 {
   require = [
     ./hardware-configuration.nix    # Results of the hardware scan.
-    (modulesPath)
   ];
 
   #boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
