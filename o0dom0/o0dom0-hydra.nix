@@ -4,9 +4,9 @@
 { config, pkgs, ... }:
 
 let
-  # hydrapkg = /nix/store/0vhipvjzq60aab5nc8lgvwfwy69v71wg-hydra-0.1pre1097-6439999;
   # hydrapkg = /nix/store/7vlizjmz662s6pifyh596n3b5zacy7iv-hydra-0.1pre1271-9f027b2;
-  hydrapkg = /nix/store/chdvwyw98yj1w2nny3mgh40c37x5cp2k-hydra-0.1pre1271-9f027b2;
+  # hydrapkg = /nix/store/chdvwyw98yj1w2nny3mgh40c37x5cp2k-hydra-0.1pre1271-9f027b2;
+  hydrapkg = /nix/store/4fqr3km5hrkd7np3mwaav3s1ryrz80a0-hydra-0.1pre1312-f447c7d;
 
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
