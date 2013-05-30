@@ -9,9 +9,11 @@
 
     emacsEnv = pkgs.buildEnv
       { name = "emacs-env";
-        paths = with pkgs.emacs23Packages;
+        paths = with pkgs.emacs24Packages;
           [ emacs
-	    #haskellMode
+	    proofgeneral
+	    haskellMode
+	    #hol_light_mode
           ];
       };
 
@@ -19,7 +21,11 @@
       { name = "misc-env";
         paths = with pkgs; [
 	  coreutils diffutils findutils file which
-        ];
+ 	];
       };
+
+    holl_mode = with pkgs; import ./holl-mode {
+      inherit stdenv fetchurl emacs;
+    };
   };
 }
