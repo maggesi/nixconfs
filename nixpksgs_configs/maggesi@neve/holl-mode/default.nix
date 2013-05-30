@@ -2,27 +2,12 @@
 
 {stdenv, fetchurl, emacs}:
 
-let
-  pname = "holl-mode";
-  version = "20071214";
-in
-
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
-
-  #src = "./${pname}-${version}.tbz2";
-  src = ./holl-mode-20071214.tbz2;
-
-  /*
-  src = fetchurl {
-    url = ./holl-mode-20071214.tbz2;
-    sha256 = "012k2w2061x3biawv2drggcad1m43nq3frbz15nj0gj6cv1yp0y8";
-  };
-  */
+  name = "holl-mode-20071214";
+  #src = ./holl-mode-20071214.tbz2;
+  src = ./holl-mode-20071214-fix;
 
   buildInputs = [ emacs ];
-
-  patches = [ ./paths-fix.patch.gz ];
 
   postPatch = ''
     export hollPath="$out/share/emacs/site-lisp"

@@ -46,12 +46,16 @@
     (define-key m "\C-c\C-r" 'holl-send-region)
     (define-key m "\C-c\C-p" 'holl-send-print)
     (define-key m "\C-c\C-b" 'holl-send-backup)
+    (define-key m "\C-c\C-q" 'holl-send-as-goal)
+    (define-key m "\C-c\C-l" 'holl-send-line)
     m))
 
 ;; Install the process communication commands in the holl-mode keymap.
 (define-key holl-mode-map [(meta return)] 'holl-send-phrase)
-(define-key holl-mode-map "\C-c\C-r" 'holl-send-region)
 (define-key holl-mode-map "\C-c\C-i" 'holl-display-inferior)
+(define-key holl-mode-map "\C-c\C-r" 'holl-send-region)
+(define-key holl-mode-map "\C-c\C-l" 'holl-send-line)
+(define-key holl-mode-map "\C-c\C-q" 'holl-send-as-goal)
 (define-key holl-mode-map "\C-c\C-b" 'holl-send-backup)
 
 (defvar holl-buffer nil "*The current holl process buffer.")
@@ -170,9 +174,26 @@ select the buffer"
   (comint-send-region (holl-proc) start end)
   (holl-display-inferior nil))
 
+(defun holl-send-line ()
+  "Send the current line to the inferior HOL-Light process."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point)))
+      (end-of-line)
+      (holl-send-region start (point))
+      (holl-send-string "\n"))))
+
 (defun holl-send-string (string)
   "Send a string to the inferior HOL-Light process."
   (comint-send-string (holl-proc) string))
+
+(defun holl-send-as-goal (start end)
+  "Send region as goal to HOL."
+  (interactive "r")
+  (holl-send-string "g ")
+  (holl-send-region start end)
+  (holl-send-string ";;\n"))
 
 (defun holl-send-phrase ()
   "Send phrase at point to the HOL-Light process."
