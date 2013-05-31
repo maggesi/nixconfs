@@ -24,7 +24,7 @@
  	];
       };
 
-    holl_mode = with pkgs; import ./holl-mode {
+    holl_mode = with pkgs; import ../../../pkgs/holl-mode {
       inherit stdenv fetchurl emacs;
     };
   };
