@@ -88,7 +88,7 @@
     (define-key km [(meta down)] 'holl-phrase-forward)
     (define-key km "\C-c\C-r" 'holl-send-region)
     (define-key km "\C-c\C-p" 'holl-send-print)
-    (define-key m "\C-c\C-m" 'holl-mark-term)
+    (define-key km "\C-c\C-m" 'holl-mark-term)
     km)
   "Keymap used in HOL-Light mode.")
 
@@ -124,8 +124,7 @@
   (set (make-local-variable 'comment-column) 40)
   (set (make-local-variable 'comment-start-skip) "(\\*+ *")
   (set (make-local-variable 'parse-sexp-ignore-comments) nil)
-  (set (make-local-variable 'indent-line-function) 'holl-indent-line)
-)
+  (set (make-local-variable 'indent-line-function) 'holl-indent-line))
 
 (defun holl-mode ()
   "Major mode for editing HOL-Light code.
