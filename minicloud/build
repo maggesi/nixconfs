@@ -1,0 +1,2 @@
+#!/bin/sh
+nixops create ./logical.nix ./physical-vbox.nix --name minicloud
