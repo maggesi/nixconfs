@@ -29,20 +29,6 @@
     '';
   };
 
-  environment.systemPackages =
-    with pkgs;
-    [ emacs screen mosh tmux
-      #emacsPackages.magit
-      #emacsPackages.ocamlMode
-      mtr
-      mercurial darcs fossil
-      gitAndTools.gitFull gitAndTools.gitAnnex
-      lynx links w3m
-      ocaml coq
-      #firefoxWrapper
-      #chromeWrapper
-    ];
-
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;

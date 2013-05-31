@@ -1,7 +1,10 @@
 { config, pkgs, modulesPath, ... }:
 
 {
-  require = [ "${modulesPath}/virtualisation/xen-domU.nix" ];
+  require = [
+    # "${modulesPath}/virtualisation/xen-domU.nix"
+    ./xen-domU.nix
+  ];
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];

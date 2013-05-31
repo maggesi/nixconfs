@@ -33,6 +33,12 @@
 
   networking.defaultMailServer.directDelivery = true;
   networking.defaultMailServer.hostName = "mail.math.unifi.it";
+  networking.interfaces.enp3s0 = {
+     ipAddress = "150.217.33.63";
+     prefixLength = 24;
+  };
+  networking.defaultGateway = "150.217.33.1";
+  networking.nameservers = [ "8.8.8.8" "150.217.33.11" ];
 
   # Add filesystem entries for each partition that you want to see
   # mounted at boot time.  This should include at least the root
