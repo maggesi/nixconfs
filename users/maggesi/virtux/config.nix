@@ -21,5 +21,9 @@
 	  coreutils diffutils findutils file which
         ];
       };
+
+    holl_mode = with pkgs; import ../../../pkgs/holl-mode {
+      inherit stdenv fetchurl emacs;
+    };
   };
 }
