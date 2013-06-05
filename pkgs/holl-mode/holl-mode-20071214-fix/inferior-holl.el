@@ -187,19 +187,51 @@ select the buffer"
       (holl-send-region start (point))
       (holl-send-string "\n"))))
 
-(defun holl-send-tactic ()
-  (interactive)
-  (save-excursion
-    (backward-paragraph)
-    (let ((start (point)))
-      (forward-paragraph)
-      (holl-send-string "e (")
-      (holl-send-region start (point))
-      (holl-send-string ");;\n"))))
+;; (defun holl-send-tactic ()
+;;   (interactive)
+;;   (save-excursion
+;;     (backward-paragraph)
+;;     (let ((start (point)))
+;;       (forward-paragraph)
+;;       (holl-send-string "e (")
+;;       (holl-send-region start (point))
+;;       (holl-send-string ");;\n"))))
 
 (defun holl-send-string (string)
   "Send a string to the inferior HOL-Light process."
   (comint-send-string (holl-proc) string))
+
+(defun holl-send-tactic ()
+  (interactive)
+  (save-excursion
+    (re-search-backward "\\`\\|^[[:space:]]*?\\(\n[[:space:]]*\\)")
+    (goto-char (match-end 0))
+    (re-search-forward
+     (concat "\\(\\(?:.*\n\\)*?"
+	     "\\(?:.*?\\)\\)"
+	     "[[:space:]]*\\(:?THENL?\\)?"
+	     "[[:space:]]*\\[?[[:space:]]*"
+	     "\n[[:space:]]*?$"))
+    (holl-send-string "e(")
+    (holl-send-string (match-string 1))
+    (holl-send-string ");;\n"))
+  (goto-char (match-end 0)))
+
+(defun holl-send-tactic ()
+  (interactive)
+  (save-excursion
+    (re-search-backward "\\`\\|^[[:space:]]*?\\(\n[[:space:]]*\\)")
+    (goto-char (match-end 0))
+    (re-search-forward
+     (concat "\\(\\(?:.*\n\\)*?"
+	     "\\(?:.*?\\)\\)"
+	     "[[:space:]]*\\(:?THENL?\\)?"
+	     "[[:space:]]*?\\[?[[:space:]]*?"
+	     "\n[[:space:]]*?$"))
+    (holl-send-string "e(")
+    (holl-send-string (match-string 1))
+    (holl-send-string ");;\n"))
+  (goto-char (match-end 1)))
 
 (defun holl-send-goal ()
   "Send region as goal to HOL."
