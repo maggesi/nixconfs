@@ -190,9 +190,16 @@ select the buffer"
 (defun holl-send-tactic ()
   (interactive)
   (save-excursion
-    (backward-paragraph)
+    (re-search-backward "^[[:space:]]*$\\|\\`")
+    (forward-line)
     (let ((start (point)))
-      (forward-paragraph)
+      (re-search-forward "^[[:space:]]*$\\|\\'")
+      (backward-char)
+      (skip-chars-backward "[:space:]")
+      (if (looking-back "THENL?")
+	  (progn
+	    (goto-char (match-beginning 0))
+	    (skip-chars-backward "[:space:]")))
       (holl-send-string "e (")
       (holl-send-region start (point))
       (holl-send-string ");;\n"))))
