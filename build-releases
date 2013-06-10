@@ -4,8 +4,8 @@ NIX_PATH=
 
 nix-build \
   -o systems-result \
-  -I configuration=/etc/nixos/systems/elio.nix \
-  -I nixpkgs=/etc/nixos/nixpkgs/ \
-  -I nixos=/etc/nixos/nixos/ \
+  -I configuration=./elio/elio.nix \
+  -I nixpkgs=~/Devel/nixpkgs/ \
+  -I nixos=~/Devel/nixos/ \
   release.nix \
   --show-trace

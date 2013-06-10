@@ -4,9 +4,7 @@
 { config, pkgs, ... }:
 
 let
-  # hydrapkg = /nix/store/chdvwyw98yj1w2nny3mgh40c37x5cp2k-hydra-0.1pre1271-9f027b2;
-  # hydrapkg = /nix/store/4fqr3km5hrkd7np3mwaav3s1ryrz80a0-hydra-0.1pre1312-f447c7d;
-  hydrapkg = /nix/store/18wp32aahmizhbws25yxhq1j37bdwh9m-hydra-0.1pre1327-43785df;
+  # hydrapkg = /nix/store/18wp32aahmizhbws25yxhq1j37bdwh9m-hydra-0.1pre1327-43785df;
   # hydrapkg = /root/.nix-profile;
 
   nixosVHostConfig = {
