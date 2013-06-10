@@ -1,7 +1,7 @@
 ;;; inferior-holl.el --- Run an inferior HOL-Light process.
-;;; Version: 2006-09
+;;; Version: 2013-06-7
 ;;; Copyright (C) Marco Maggesi (http://www.math.unifi.it/~maggesi/)
-;;; Compatibility: Emacs21
+;;; Compatibility: Emacs24.2 or later
 
 ;; LICENCE:
 ;;
@@ -61,22 +61,66 @@
     (modify-syntax-entry ?\$ ".   " st)
     (modify-syntax-entry ?\& ".   " st)
     (modify-syntax-entry ?\' "w   " st)
-    (modify-syntax-entry ?\( "()1n" st)
-    (modify-syntax-entry ?\) ")(4n" st)
+    (modify-syntax-entry ?\( "()1" st)
+    (modify-syntax-entry ?\) ")(4" st)
     (modify-syntax-entry ?\* ". 23n" st)
     (modify-syntax-entry ?\/ ".  " st)
     (modify-syntax-entry ?\\ "\\  " st)
     (modify-syntax-entry ?\| ".  " st)
     (modify-syntax-entry ?_  "_  " st)
-    (modify-syntax-entry ?`  "$  " st)
+    (modify-syntax-entry ?`  "|  " st)
     st)
   "Syntax table for `holl-mode'.")
 
+;; (defvar holl-term-syntax-table
+;;   (let ((st (make-syntax-table)))
+;;     (modify-syntax-entry ?%  ".   " st)
+;;     (modify-syntax-entry ?+  ".   " st)
+;;     (modify-syntax-entry ?-  ".   " st)
+;;     (modify-syntax-entry ?<  ".   " st)
+;;     (modify-syntax-entry ?=  ".   " st)
+;;     (modify-syntax-entry ?>  ".   " st)
+;;     (modify-syntax-entry ?\" ".  " st)
+;;     (modify-syntax-entry ?\$ ".   " st)
+;;     (modify-syntax-entry ?\& ".   " st)
+;;     (modify-syntax-entry ?\' "w   " st)
+;;     (modify-syntax-entry ?\( "()1" st)
+;;     (modify-syntax-entry ?\) ")(4" st)
+;;     (modify-syntax-entry ?\* ".  " st)
+;;     (modify-syntax-entry ?\/ ". 12" st)
+;;     (modify-syntax-entry ?\\ "\\  " st)
+;;     (modify-syntax-entry ?\| ".  " st)
+;;     (modify-syntax-entry ?_  "_  " st)
+;;     (modify-syntax-entry ?`  "$  " st)
+;;     (modify-syntax-entry ?\n  ">  " st)
+;;     st)
+;;   "Syntax table for holl terms in `holl-mode'.")
+
+;; TODO: instead of generic string delimiter, use paired delimiters
+;; and install a syntax table for terms.
+(defun holl-syntax-term-quotation (end)
+  (when (eq t (nth 3 (syntax-ppss)))
+    ;; We're indeed inside a HOL term quotation.
+    (when (search-forward "`" end t)
+      (put-text-property (1- (point)) (point)
+			 'syntax-table (string-to-syntax "|")))))
+
+(defun holl-syntax-propertize (start end)
+  ;; TODO: Make non-interactive
+  (interactive "r")
+  (goto-char start)
+  (holl-syntax-term-quotation end)
+  (funcall
+   (syntax-propertize-rules
+    ("(\\(\\*\\))" (1 ".   "))
+    ("`" (0 (prog1 "|" (holl-syntax-term-quotation end)))))
+   start end))
+
 (defvar holl-font-lock-keywords
-  (list (cons (regexp-opt
-	       '("and" "else" "end" "if" "in" "let" "rec" "match"
-		 "then" "val" "with") 'words)
-	      'font-lock-keyword-face))
+  (let ((holl-keywords
+	 '("let" "rec" "and" "in" "val" "fun" "function" "begin" "end"
+	   "if" "then" "else" "match" "with")))
+    `((,(regexp-opt holl-keywords 'words) . font-lock-keyword-face)))
   "Keyword highlighting specification for `holl-mode'.")
 
 (defvar holl-mode-map
@@ -100,28 +144,30 @@
   "Indent a line in HOL-Light mode."
   (interactive)
   (let ((col (save-excursion
-	       (forward-line -1)
-	       (current-indentation))))
+               (forward-line -1)
+               (current-indentation))))
     (back-to-indentation)
     (if (> (current-column) col)
-	(let ((pt (point)))
-	  (move-to-column col)
-	  (delete-region pt (point)))
+        (let ((pt (point)))
+          (move-to-column col)
+          (delete-region pt (point)))
       (indent-to col))))
 
 (defun holl-mode-variables ()
   (set-syntax-table holl-mode-syntax-table)
-  (set (make-local-variable 'paragraph-start)
-       (concat "^$\\|" page-delimiter))
+  ;; TODO: Do we need this?
+  ;; (set (make-local-variable 'paragraph-start) (concat "^$\\|" page-delimiter))
   (set (make-local-variable 'paragraph-separate) paragraph-start)
   (set (make-local-variable 'paragraph-ignore-fill-prefix) t)
   (set (make-local-variable 'require-final-newline) t)
   (set (make-local-variable 'comment-start) "(* ")
   (set (make-local-variable 'comment-end) " *)")
   (set (make-local-variable 'comment-column) 40)
-  (set (make-local-variable 'comment-start-skip) "(\\*+ *")
+  (set (make-local-variable 'comment-start-skip) "(\\*+[[:space:]]*") ; TODO: Handle (*)
   (set (make-local-variable 'parse-sexp-ignore-comments) nil)
-  (set (make-local-variable 'indent-line-function) 'holl-indent-line))
+  (set (make-local-variable 'indent-line-function) 'holl-indent-line)
+  (set (make-local-variable 'syntax-propertize-function)
+       #'holl-syntax-propertize))
 
 (defun holl-mode ()
   "Major mode for editing HOL-Light code.
@@ -138,21 +184,44 @@ indentation level.
   (setq mode-name "holl")
   (use-local-map holl-mode-map)
   (holl-mode-variables)
-  (make-local-variable 'font-lock-defaults)
-  (setq font-lock-defaults '(holl-font-lock-keywords))
+  (setq font-lock-defaults `(,holl-font-lock-keywords))
   (run-hooks 'holl-mode-hook))
 
-(defun holl-mark-term ()
-  "Select the a HOL term."
+(defun holl-begin-term ()
+  "Go to the beginning, outside the quotation, of a HOL term.
+Do nothing when called outside a term."
   (interactive)
-  (let ((end
-	 (save-excursion
-	   (skip-chars-forward "^`")
-	   (forward-char)
-	   (point))))
-    (skip-chars-backward "^`")
-    (backward-char)
-    (push-mark end nil t)))
+  (when (eq t (nth 3 (syntax-ppss)))
+    (re-search-backward "\\s|" nil t)))
+
+(defun holl-end-term ()
+  "Go to the end, outside the quotation, of a HOL term.
+Do nothing when called outside a term."
+  (interactive)
+  (when (eq t (nth 3 (syntax-ppss)))
+    (re-search-forward "\\s|" nil t)))
+
+;; (defun holl-mark-term ()
+;;   "Select the a HOL term."
+;;   (interactive)
+;;   (when (search-forward "`" nil t)
+;;     (let ((end (point)))
+;;       (backward-char)
+;;       (when (search-backward "`")
+;;         (push-mark end t t)
+;;         (point)))))
+
+(defun holl-mark-term ()
+  "Select a HOL term.  Raise an error if outside a hol term."
+  (interactive)
+  (if (not (eq t (nth 3 (syntax-ppss))))
+      (error "Not on a HOL term.")
+    (let ((origin (point)))
+      (holl-end-term)
+      (push-mark (point) t t)
+      (goto-char origin)
+      (holl-begin-term)
+      (point))))
 
 (defun holl-search-double-semicolon-forward (&optional arg)
   "Search forward the N-th double semicolon \";;\" in a HOL-Light script.
@@ -164,11 +233,11 @@ otherwise return nil."
   (if (< arg 0)
       (holl-search-double-semicolon-backward (- arg))
     (while (and (> arg 0)
-		(re-search-forward "\\(;;\\)\\|\\(([*]\\)" nil t)
-		(if (match-beginning 1)
-		    (setq arg (1- arg))
-		  (goto-char (match-beginning 2))
-		  (forward-comment 1))))
+                (re-search-forward "\\(;;\\)\\|\\(([*]\\)" nil t)
+                (if (match-beginning 1)
+                    (setq arg (1- arg))
+                  (goto-char (match-beginning 2))
+                  (forward-comment 1))))
     (= arg 0)))
 
 (defun holl-search-double-semicolon-backward (&optional arg)
@@ -181,11 +250,11 @@ otherwise return nil."
   (if (< arg 0)
       (holl-search-double-semicolon-forward (- arg))
     (while (and (> arg 0)
-		(re-search-backward "\\(;;\\)\\|\\([*])\\)" nil t)
-		(if (match-beginning 1)
-		    (setq arg (1- arg))
-		  (goto-char (match-end 2))
-		  (forward-comment -1))))
+                (re-search-backward "\\(;;\\)\\|\\([*])\\)" nil t)
+                (if (match-beginning 1)
+                    (setq arg (1- arg))
+                  (goto-char (match-end 2))
+                  (forward-comment -1))))
     (if (= arg 0) t
       (goto-char (point-min))
       nil)))
