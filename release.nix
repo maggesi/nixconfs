@@ -1,5 +1,6 @@
 { nixpkgsSrc ? <nixpkgs>
 , nixosSrc ? <nixos>
+, system ? builtins.currentSystem
 }:
 
 let
