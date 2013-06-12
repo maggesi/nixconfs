@@ -3,7 +3,7 @@
 {
   require = [
     # "${modulesPath}/virtualisation/xen-domU.nix"
-    ./xen-domU.nix
+    ../modules/xen-domU.nix
   ];
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
