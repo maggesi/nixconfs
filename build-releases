@@ -1,11 +1,6 @@
 #!/bin/sh
 
-NIX_PATH=
-
 nix-build \
   -o systems-result \
-  -I configuration=./elio/elio.nix \
-  -I nixpkgs=~/Devel/nixpkgs/ \
-  -I nixos=~/Devel/nixos/ \
   release.nix \
   --show-trace
