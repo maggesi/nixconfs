@@ -4,7 +4,6 @@
 }:
 
 let
-  system = builtins.currentSystem;
   pkgs = import nixpkgsSrc { inherit system; };
   eval = conf: import (nixosSrc + "/lib/eval-config.nix")
     { inherit pkgs system;
