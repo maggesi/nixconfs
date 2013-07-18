@@ -9,9 +9,11 @@
 
     emacsEnv = pkgs.buildEnv
       { name = "emacs-env";
-        paths = with pkgs.emacs23Packages;
+        paths = with pkgs.emacs24Packages;
           [ emacs
+	    #proofgeneral
 	    #haskellMode
+	    #hol_light_mode
           ];
       };
 
