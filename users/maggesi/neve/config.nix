@@ -36,6 +36,11 @@
       camlp5 = ocamlPackages.camlp5_transitional;
     };
 
+    hott = with pkgs; import ../../../pkgs/hott {
+      inherit stdenv fetchgit;
+      coq = coq_hott;
+    };
+
     holl_mode = with pkgs; import ../../../pkgs/holl-mode {
       inherit stdenv fetchurl emacs;
     };
