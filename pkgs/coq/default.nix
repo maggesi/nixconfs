@@ -43,9 +43,10 @@ stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
+  #buildFlags = "coqlight";
   buildFlags = "revision coq coqide";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Coq proof assistant";
     longDescription = ''
       Coq is a formal proof management system.  It provides a formal language
@@ -53,8 +54,9 @@ stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
-    license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    homepage = http://coq.inria.fr;
+    license = licenses.lgpl21Plus;
+    platforms = with platforms; unix ++ darwin;
+    maintainers = with maintainers; [ roconnor z77z ];
   };
 }
