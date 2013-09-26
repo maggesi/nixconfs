@@ -82,8 +82,8 @@
   services.xserver.xkbOptions = "eurosign:e";
 
   # X11 non funziona, proviamo ad aggiungere qualche conf.
-  services.xserver.desktopManager.default = "kde4";
-  #services.xserver.desktopManager.default = "xfce";
+  #services.xserver.desktopManager.default = "kde4";
+  services.xserver.desktopManager.default = "xfce";
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.kdm.enable = true;
