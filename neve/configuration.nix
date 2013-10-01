@@ -8,6 +8,7 @@
   require =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <nixos/modules/programs/virtualbox.nix>
     ];
 
   boot.initrd.kernelModules =
