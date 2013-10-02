@@ -6,119 +6,34 @@
 {config, pkgs, ...}:
 
 {
-  require = [
-    # Include the configuration for part of your system which have been
-    # detected automatically.
-    ./hardware-configuration.nix
-  ];
+  require = [ ./hardware-configuration.nix ];
 
-  # boot.kernelPackages = pkgs.linuxPackages_2_6_35;
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  boot.loader.grub.device = "/dev/sda";
 
-  boot.initrd.kernelModules = [
-    # Specify all kernel modules that are necessary for mounting the root
-    # file system.
-    #
-    # "ext4" "ata_piix"
-  ];
+  networking.hostName = "holinux";
 
-  boot.loader.grub = {
-    # Use grub 2 as boot loader.
-    enable = true;
-    version = 2;
-
-    # Define on which hard drive you want to install Grub.
-    device = "/dev/sda";
-  };
-
-  boot.vesa = true;
-
-  networking = {
-    hostName = "holinux"; # Define your hostname.
-    # wireless.enable = true;  # Enables Wireless.
-  };
-
-  # Add file system entries for each partition that you want to see mounted
-  # at boot time.  You can add filesystems which are not mounted at boot by
-  # adding the noauto option.
-  fileSystems = [
-    # Mount the root file system
-    #
-    # { mountPoint = "/";
-    #   device = "/dev/sda2";
-    # }
-    { mountPoint = "/";
-      label = "nixos"; 
-    }
-
-    # Copy & Paste & Uncomment & Modify to add any other file system.
-    #
-    # { mountPoint = "/data"; # where you want to mount the device
-    #   device = "/dev/sdb"; # the device or the label of the device
-    #   # label = "data";
-    #   fsType = "ext3";      # the type of the partition.
-    #   options = "data=journal";
-    # }
-  ];
-
-  swapDevices = [
-    # List swap partitions that are mounted at boot time.
-    #
-    # { device = "/dev/sda1"; }
-    { label = "swap"; }
-  ];
+  fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
+  swapDevices = [ { label = "swap"; } ];
 
   # Select internationalisation properties.
-  i18n = {
-    consoleFont = "lat9w-16";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
+  i18n.consoleFont = "lat9w-16";
+  i18n.consoleKeyMap = "us";
+  i18n.defaultLocale = "en_US.UTF-8";
 
   environment.blcr.enable = true;
+  environment.systemPackages = [ pkgs.firefoxWrapper ];
 
-  environment.systemPackages = [
-    pkgs.firefoxWrapper
-    pkgs.emacs
-    pkgs.hol_light
-    pkgs.fossil
-  ];
+  services.xserver.enable = true;
+  services.xserver.layout = "us";
+  services.xserver.xkbOptions = "eurosign:e";
 
-  # List services that you want to enable:
+  services.xserver.desktopManager.default = "xfce";
+  services.xserver.desktopManager.xfce.enable = true;
 
-  # Add an OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Add CUPS to print documents.
-  # services.printing.enable = true;
-
-  services.ttyBackgrounds.enable = false;
-
-  # Add XServer (default if you have used a graphical iso)
-  services.xserver = {
-    enable = true;
-    layout = "us";
-    xkbOptions = "eurosign:e";
-
-    ## windowManager.default = "awesome";
-    ## windowManager.default = "i3";
-    ## windowManager.default = "icewm";
-    ## windowManager.default = "wmii";
-    ## windowManager.awesome.enable = true;
-    ## windowManager.i3.enable = true;
-    ## windowManager.icewm.enable = true;
-    ## windowManager.wmii.enable = true;
-
-    desktopManager = {
-      #default = "xfce";
-      default = "kde4";
-      xfce.enable = false;
-      kde4.enable = true;
-    };
-    displayManager.auto = { enable = true; user = "holuser"; };
-  };
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.auto.user = "holuser";
 
   time.timeZone = "Europe/Rome";
-
-  # Add the NixOS Manual on virtual console 8
-  # services.nixosManual.showManual = true;
 }
