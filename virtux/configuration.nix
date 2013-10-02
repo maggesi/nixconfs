@@ -14,7 +14,6 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  boot.initrd.enableSplashScreen = false;
   boot.initrd.kernelModules =
     [ # Specify all kernel modules that are necessary for mounting the root
       # filesystem.
@@ -43,7 +42,6 @@
 
   services = {
     gpm.enable = true;
-    ttyBackgrounds.enable = false;
 
     locate.enable = true;
     locate.period = "40 3 * * *";
