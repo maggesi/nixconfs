@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   prefixKey = "-prefix ";
 
   #buildFlags = "coqlight";
-  buildFlags = "revision coq coqide";
+  buildFlags = "coqlight coqide";
 
   meta = with stdenv.lib; {
     description = "Coq proof assistant";

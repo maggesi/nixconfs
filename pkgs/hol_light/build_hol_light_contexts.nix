@@ -99,9 +99,9 @@ in rec {
     variant = "gcs";
     description = "Geometria Computazionale Simbolica 2013-2014";
     command = hol_light_multivariate;
+
     load_script = ''
-      let ASSERT_TAC s tm = SUBGOAL_THEN tm (DESTRUCT_TAC s);;
-      let WITH tml = MP_TAC (end_itlist CONJ tml);;
+      loadt "${./gcs.hl}";;
       prioritize_num();;
       type_invention_error := true;;
       ignore (search[]);;

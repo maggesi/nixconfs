@@ -1,0 +1,81 @@
+(* ========================================================================= *)
+(* Tattiche per il tuturial.                                                 *)
+(* ========================================================================= *)
+
+let APPLY_TAC : thm_tactic =
+  fun th -> MATCH_ACCEPT_TAC th ORELSE MATCH_MP_TAC th;;
+
+let HAVE_TAC : term -> tactic =
+  fun tm -> SUBGOAL_THEN tm MP_TAC;;
+
+let CUT_TAC : term -> tactic =
+  let th = MESON [] `(p ==> q) /\ p ==> q`
+  and ptm = `p:bool` in
+  fun tm -> MATCH_MP_TAC (INST [tm,ptm] th) THEN CONJ_TAC;;
+
+let ASSERT_TAC s tm = SUBGOAL_THEN tm (DESTRUCT_TAC s );;
+
+let TRIVIAL = MESON[];;
+
+let BY conv lbls ths =
+  let WITH_TAC tml =
+    if tml=[] then ALL_TAC else MP_TAC (end_itlist CONJ tml) in
+  HYP WITH_TAC lbls ths THEN
+  CONV_TAC conv THEN NO_TAC;;
+
+let SHOW_TAC : term -> tactic =
+  let th = MESON [] `p <=> (p = T)`
+  and ptm = `p:bool` in
+  let BOOL_ELIM =
+    GEN_REWRITE_TAC DEPTH_CONV
+      [NOT_CLAUSES; AND_CLAUSES; OR_CLAUSES; IMP_CLAUSES; COND_CLAUSES] in
+  fun tm -> let eq = INST [tm,ptm] th in
+    SUBGOAL_THEN tm
+      (fun hp -> CHANGED_TAC (SUBST1_TAC (EQ_MP eq hp)) THEN BOOL_ELIM);;
+
+let CASES_TAC s tm =
+  let th = SPEC tm EXCLUDED_MIDDLE in
+  DISJ_CASES_THEN2 (LABEL_TAC s) (LABEL_TAC ("not_"^s)) th;;
+
+let OLD_ABBREV_TAC = ABBREV_TAC;;
+
+let ABBREV_TAC tm =
+  let s = name_of (lhs tm) in
+  OLD_ABBREV_TAC tm THEN POP_ASSUM (LABEL_TAC s);;
+
+let EXPAND_TAC : string -> tactic =
+  let SUBST_VAR : string -> thm_tactic =
+    fun s th ->
+      let l,r = dest_eq(concl th) in
+      if is_var l & name_of l = s then SUBST_ALL_TAC th else
+      if is_var r & name_of r = s then SUBST_ALL_TAC (GSYM th) else fail () in
+  fun s -> FIRST_X_ASSUM (SUBST_VAR s);;
+
+(* ------------------------------------------------------------------------- *)
+(* Parser per type invention.                                                *)
+(* ------------------------------------------------------------------------- *)
+
+type_invention_error := true;;
+
+let parse_term_invention s =
+  let tie = !type_invention_error in
+  type_invention_error := not tie;
+  let tm = parse_term s in
+  type_invention_error := tie;
+  tm;;
+
+let quotexpander s =
+  if s = "" then failwith "Empty quotation" else
+  let c = String.sub s 0 1 in
+  if c = ":" then
+    "parse_type \""^
+    (String.escaped (String.sub s 1 (String.length s - 1)))^"\""
+  else if c = "%" then
+    "parse_term_invention \""^
+    (String.escaped (String.sub s 1 (String.length s - 1)))^"\""
+  else if c = ";" then "parse_qproof \""^(String.escaped s)^"\""
+  else "parse_term \""^(String.escaped s)^"\"";;
+
+unset_jrh_lexer;;
+Quotation.add "tot" (Quotation.ExStr (fun x -> quotexpander));;
+set_jrh_lexer;;
