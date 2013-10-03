@@ -25,7 +25,6 @@
   boot.loader.grub.device = "/dev/sda";
 
   #boot.kernelPackages = pkgs.linuxPackages_2_6_35;
-  boot.initrd.enableSplashScreen = false;
 
   #hardware.enableAllFirmware = true;
 
@@ -74,8 +73,6 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
   services.printing.drivers = [ pkgs.splix ];
-
-  services.ttyBackgrounds.enable = false;
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
