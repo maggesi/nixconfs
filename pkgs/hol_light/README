@@ -1,0 +1,40 @@
+This directory contains a Nix based script to build checkpointed
+binaries of HOL Light with various preloaded libraries.
+
+Note that it is enough to have Nix (and Nixpkgs) to install HOL Light
+itself.  Simply use
+  nix-env -i hol_light
+it should work on most systems (on all variants of Linux and MacOSX at
+least).  Hence these instructions are useful only if you want to build
+checkpointed binaries.
+
+It has been tested only on NixOS (http://nixos.org).  It should work
+with minimal adaptation on any Linux based distribution with BLCR
+checkpoint software and the nix/nkxpkgs suite installed.
+
+Instructions (for NixOS):
+
+1. Install BLCR: set variable environment.blcr.enable = true in
+/etc/nixos/configuration.nix.  Then rebuild the system and reboot.
+
+2. Download then HOL Light sources:
+  svn checkout http://hol-light.googlecode.com/svn/trunk/ hol_light
+  cd hol_light
+
+3. Copy or link default.nix and build_hol_light_contexts then run
+  ./build_hol_light_contexts
+
+4. At the and of the build, a number of shell scripts to start
+hol_light have been created in ~/bin
+E.g.:  use
+  hol_light_core
+to start the basic system or
+  hol_light_multivariate
+to start HOL Light with multivariate real analysis preloaded.
+(Depending on your system it can take some hours to finish the build.
+You can easly edit and adapt the script to build only the checkpoints you
+need).
+
+Every system upgrade may break the checkpointed binaries.  In this
+case it should be enough to run ./build_hol_light_contexts to generate
+the new contexts and fix the problem.
