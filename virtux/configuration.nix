@@ -14,12 +14,6 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  boot.initrd.kernelModules =
-    [ # Specify all kernel modules that are necessary for mounting the root
-      # filesystem.
-      # "xfs" "ata_piix"
-    ];
-
   #boot.kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
 
   # The follwoing kernel params are needed when VirtualBox Guest
@@ -37,8 +31,6 @@
     defaultMailServer.directDelivery = true;
     defaultMailServer.hostName = "mail.math.unifi.it";
   };
-
-  nix.maxJobs = 1;
 
   services = {
     gpm.enable = true;
