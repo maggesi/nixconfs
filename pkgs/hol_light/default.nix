@@ -9,11 +9,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-20130922";
+  name = "hol_light-20131013";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "173";
-    sha256 = "1dj49mwlvrnhl421xazw6wz2lqpp5gi4vvbvld6fysfr97ia9wyf";
+    rev = "174";
+    sha256 = "0dqyki50brf03h035ng6b7kxdqqrvb23f0cbphngyasj1d2v64q0";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
