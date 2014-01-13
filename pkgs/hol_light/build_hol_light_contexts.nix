@@ -90,6 +90,7 @@ in rec {
       loadt "Multivariate/canal.ml";;
       loadt "Multivariate/transcendentals.ml";;
       loadt "Multivariate/realanalysis.ml";;
+      loadt "Multivariate/moretop.ml";;
       loadt "Multivariate/cauchy.ml";;
       loadt "Multivariate/complex_database.ml";;
     '';
@@ -98,13 +99,13 @@ in rec {
   hol_light_gcs = mkVariant {
     variant = "gcs";
     description = "Geometria Computazionale Simbolica 2013-2014";
-    command = hol_light_multivariate;
+    command = hol_light_complex;
 
     load_script = ''
       loadt "${./gcs.hl}";;
       prioritize_num();;
       type_invention_error := true;;
-      ignore (search[]);;
+      ignore (search[`1`]);;
       Gc.compact();;
     '';
   };
