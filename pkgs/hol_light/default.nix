@@ -9,11 +9,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-20131124";
+  name = "hol_light-20140112";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "178";
-    sha256 = "0bq6h23viqwx4gn195cw0i1qg1wqggfsx5p0vplp2ivd4kl72c2y";
+    rev = "179";
+    sha256 = "1j402s7142fj09bjijrkargwx03fvbdwmn0hgzzmi6s4p1y7gww0";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
@@ -26,15 +26,15 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "An interactive theorem prover based on Higher-Order Logic.";
+    description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
-HOL Light is a computer program to help users prove interesting mathematical
-theorems completely formally in Higher-Order Logic.  It sets a very exacting
-standard of correctness, but provides a number of automated tools and
-pre-proved mathematical theorems (e.g., about arithmetic, basic set theory and
-real analysis) to save the user work.  It is also fully programmable, so users
-can extend it with new theorems and inference rules without compromising its
-soundness.
+      HOL Light is a computer program to help users prove interesting
+      mathematical theorems completely formally in Higher-Order Logic.  It sets
+      a very exacting standard of correctness, but provides a number of
+      automated tools and pre-proved mathematical theorems (e.g., about
+      arithmetic, basic set theory and real analysis) to save the user work.
+      It is also fully programmable, so users can extend it with new theorems
+      and inference rules without compromising its soundness.
     '';
     homepage = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license = stdenv.lib.licenses.bsd2;
