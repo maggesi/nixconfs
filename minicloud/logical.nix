@@ -14,13 +14,13 @@
         [
           emacs
 	  mc
-	  ocaml
 	  screen
 	  tmux
         ];
     };
 
-  mybox = 
+/*
+  patripatan = 
     { config, pkgs, ... }:
     {
       environment.blcr.enable = true;
@@ -34,4 +34,5 @@
 	  tmux
         ];
     };
+*/
 }
