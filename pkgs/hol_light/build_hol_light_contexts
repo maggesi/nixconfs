@@ -5,7 +5,6 @@ export SYSVER=$(uname -a)
 function build () {
     nix-build \
 	--show-trace \
-	-I "nixpkgs=/home/maggesi/Devel/nixpkgs" \
 	-I "blcr=/run/current-system/sw/bin" \
 	-A hol_light_$1 \
 	-o ~/bin/hol_light_$1 \
