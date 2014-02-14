@@ -1,9 +1,25 @@
 (* ========================================================================= *)
-(* Tattiche per il tuturial.                                                 *)
+(* Configurazione per GCS.                                                   *)
 (* ========================================================================= *)
 
-let APPLY_TAC : thm_tactic =
-  fun th -> MATCH_ACCEPT_TAC th ORELSE MATCH_MP_TAC th;;
+(* ------------------------------------------------------------------------- *)
+(* Print context variables and their types.                                  *)
+(* ------------------------------------------------------------------------- *)
+
+let print_context_variables =
+  let collect =  itlist (fun th vlist -> variables th @ vlist) in
+  fun () -> let asl,w = top_goal() in
+            let vlist = collect asl (variables w) in
+  	    map dest_var (setify vlist);;
+
+(* ------------------------------------------------------------------------- *)
+(* Further generally useful tactics.                                         *)
+(* ------------------------------------------------------------------------- *)
+
+let APPLY_TAC : thm_tactic = fun th ->
+  try let tac = MATCH_MP_TAC th in
+      MATCH_ACCEPT_TAC th ORELSE tac
+  with _ -> MATCH_ACCEPT_TAC th;;
 
 let HAVE_TAC : term -> tactic =
   fun tm -> SUBGOAL_THEN tm MP_TAC;;
