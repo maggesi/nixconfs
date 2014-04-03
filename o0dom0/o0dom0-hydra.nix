@@ -7,6 +7,23 @@ let
   # hydrapkg = /nix/store/18wp32aahmizhbws25yxhq1j37bdwh9m-hydra-0.1pre1327-43785df;
   # hydrapkg = /root/.nix-profile;
 
+/*
+  systemd.containers =
+          { webserver =
+              { root = "/containers/webserver";
+                path = "/nix/var/nix/profiles/webserver";
+              };
+            database =
+              { root = "/containers/database";
+                config =
+                  { config, pkgs, ... }:
+                  { services.postgresql.enable = true;
+                    services.postgresql.package = pkgs.postgresql92;
+                  };
+              };
+          };;
+*/
+
   nixosVHostConfig = {
     hostName = "o0dom0.math.unifi.it";
     adminAddr = "maggesi@math.unifi.it";
@@ -41,8 +58,10 @@ let
 in
 {
   require = [
-    ../modules/hydra.nix
+    #../modules/hydra.nix
+    ###/root/.nix-profile/share/nix/hydra-module.nix
     ./hardware-configuration.nix    # Results of the hardware scan.
+    <nixos/modules/programs/virtualbox.nix>
   ];
 
   environment.shellInit = ''
@@ -119,6 +138,7 @@ in
       links w3m wget
     ];
 
+/*
   services.hydra = {
     enable = true;
     # hydra = hydrapkg;
@@ -131,12 +151,13 @@ in
     minimumDiskFreeEvaluator = 1;
     #tracker = "<div>Dipartimento di Matematica Ulisse Dini</div>";
   };
+*/
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
 
-  services.postgresql.enable = true;
-  services.postgresql.package = pkgs.postgresql83;
+  #services.postgresql.enable = true;
+  #services.postgresql.package = pkgs.postgresql84;
 
   services.httpd = {
     enable = true;
@@ -171,6 +192,7 @@ in
 
   time.timeZone = "Europe/Rome";
 
+/*
   users.extraUsers = [
     { name = "maggesi";
       description = "Marco Maggesi";
@@ -181,4 +203,5 @@ in
       useDefaultShell = true;
     }
   ];
+*/
 }
