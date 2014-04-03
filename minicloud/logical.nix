@@ -6,6 +6,7 @@
   webserver = 
     { config, pkgs, ... }:
     {
+      require = [ <nixos/modules/programs/virtualbox.nix> ];
       services.httpd.enable = true;
       services.httpd.adminAddr = "marco.maggesi@unifi.it";
       services.httpd.documentRoot = "${pkgs.valgrind}/share/doc/valgrind/html";

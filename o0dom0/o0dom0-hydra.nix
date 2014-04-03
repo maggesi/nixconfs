@@ -72,6 +72,7 @@ in
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
+  boot.kernelModules = [ "kvm-amd" "tun" "virtio" ];
 
   networking = {
     hostName = "o0dom0";
