@@ -4,7 +4,7 @@ let
   start_script = ''
     #!/bin/sh
     cd "$out/lib/hol_light"
-    exec ${ocaml}/bin/ocaml -I "camlp5 -where" -init make.ml
+    exec ${ocaml}/bin/ocaml -I `camlp5 -where` -init make.ml
   '';
 in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   name = "hol_light-20140330";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "187";
+    rev = "189";
     sha256 = "1ibva4zzsmdzpv1i8iyz9lkzv15akyigjl94f6r256pb376b2jdg";
   };
 
