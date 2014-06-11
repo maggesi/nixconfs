@@ -100,6 +100,8 @@
 
   environment.blcr.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+
   krb5 = {
     enable = true;
     defaultRealm = "MATH.UNIFI.IT";
