@@ -14,7 +14,7 @@
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
 
-  #boot.kernelPackages = pkgs.linuxPackages_2_6_35; # For BLCR 0.8.4
+  boot.kernelPackages = pkgs.linuxPackages_3_4; # For BLCR 0.8.4
 
   # The follwoing kernel params are needed when VirtualBox Guest
   # Additions do not work to set up a convenient screen size (see
