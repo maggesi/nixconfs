@@ -1,16 +1,20 @@
 #lang racket
 
-(define system-bin-path
-  (string->path "/run/current-system/sw/bin"))
+(require "nix.rkt")
+
+(module+ test
+  (require rackunit))
 
 (define nixos-channel-path
-  (string->path "/nix/var/nix/profiles/per-user/root/channels/nixos/nixos"))
+  (findf directory-exists?
+         (list (string->path "/nix/var/nix/profiles/per-user/root/channels/nixos/nixos")
+               (build-path (find-system-path 'home-dir)
+                           (string->path ".nix-defexpr/channels/nixpkgs/nixos")))))
 
-(define nix-build-path
-  (build-path system-bin-path (string->path-element "nix-build")))
-
-(define (run-nix-build . args)
-  (apply system* nix-build-path args))
+(module+ test
+  (check-pred directory-exists?
+              (build-path (find-system-path 'home-dir)
+                          (string->path ".nix-defexpr/channels/nixpkgs/nixos"))))
 
 (define (nix-build-system configuration)
   (run-nix-build
@@ -20,8 +24,19 @@
    "--arg" "configuration" configuration
    "-A" "system"))
 
-(with-output-to-string
- (lambda () (nix-build-system "/home/maggesi/Devel/nixconfs/neve/configuration.nix")))
+#;(with-output-to-string
+ (lambda ()
+   (nix-build-system (build-path (find-system-path 'home-dir)
+                                 (string->path "Devel/nixconfs/neve/configuration.nix")))))
+
+#;(with-output-to-string
+ (lambda ()
+   (nix-build-system (build-path (find-system-path 'home-dir)
+                                 (string->path "Devel/nixconfs/elio/elio.nix")))))
 
 (with-output-to-string
- (lambda () (nix-build-system "/home/maggesi/Devel/nixconfs/elio/elio.nix")))
+ (lambda ()
+   (run-nix-channel "--update")
+   (run-nix-collect-garbage "--delete-older-than" "60d")
+   (run-nix-env "--always" "-u" "*" "-b")
+   (run-nix-env "--always" "-u" "*" "--dry-run")))
