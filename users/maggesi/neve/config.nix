@@ -1,3 +1,4 @@
+# nixpkgs configuration for maggesi@neve
 # ~/.nixpkgs/config.nix
 {
   packageOverrides = pkgs: rec {
