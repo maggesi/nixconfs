@@ -100,13 +100,11 @@ in rec {
     variant = "gcs";
     description = "Geometria Computazionale Simbolica 2013-2014";
     command = hol_light_complex;
-
     load_script = ''
       loadt "${./gcs.hl}";;
       prioritize_num();;
       type_invention_error := true;;
       ignore (search[`1`]);;
-      Gc.compact();;
     '';
   };
 

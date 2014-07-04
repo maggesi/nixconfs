@@ -63,8 +63,8 @@ let EXPAND_TAC : string -> tactic =
   let SUBST_VAR : string -> thm_tactic =
     fun s th ->
       let l,r = dest_eq(concl th) in
-      if is_var l & name_of l = s then SUBST_ALL_TAC th else
-      if is_var r & name_of r = s then SUBST_ALL_TAC (GSYM th) else fail () in
+      if is_var l && name_of l = s then SUBST_ALL_TAC th else
+      if is_var r && name_of r = s then SUBST_ALL_TAC (GSYM th) else fail () in
   fun s -> FIRST_X_ASSUM (SUBST_VAR s);;
 
 (* ------------------------------------------------------------------------- *)

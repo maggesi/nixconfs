@@ -24,12 +24,12 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
-  #boot.kernelPackages = pkgs.linuxPackages_2_6_35;
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_4;
 
   #hardware.enableAllFirmware = true;
 
   networking.hostName = "neve"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables Wireless.
 
   networking.defaultMailServer.directDelivery = true;
   networking.defaultMailServer.hostName = "mail.math.unifi.it";
@@ -78,9 +78,6 @@
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.xkbOptions = "eurosign:e";
-
-  # X11 non funziona, proviamo ad aggiungere qualche conf.
-  #services.xserver.desktopManager.default = "kde4";
   services.xserver.desktopManager.default = "xfce";
 
   # Enable the KDE Desktop Environment.
@@ -104,14 +101,14 @@
 
   environment.blcr.enable = true;
 
-  /*
+  nixpkgs.config.allowUnfree = true;
+
   krb5 = {
     enable = true;
     defaultRealm = "MATH.UNIFI.IT";
     kdc = "kerberos.math.unifi.it";
     kerberosAdminServer = "kerberos.math.unifi.it";
   };
-  */
 
   /*
   users.extraUsers = [

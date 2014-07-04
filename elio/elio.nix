@@ -2,9 +2,12 @@
 
 {
   require = [
-    # "${modulesPath}/virtualisation/xen-domU.nix"
-    ../modules/xen-domU.nix
+    "${modulesPath}/virtualisation/xen-domU.nix"
+    #../modules/xen-domU.nix
   ];
+
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_4;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];
@@ -29,10 +32,16 @@
     '';
   };
 
+  environment.blcr.enable = true;
+
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
+
+  services.httpd.enable = true;
+  services.httpd.adminAddr = "maggesi@math.unifi.it";
+  services.httpd.documentRoot = "/home/maggesi/public_html";
 
   #services.openafsClient.enable = true;
   services.openafsClient.cellName = "math.unifi.it";

@@ -1,3 +1,4 @@
+# nixpkgs configuration for maggesi@virtux, maggesi@crystal
 # ~/.nixpkgs/config.nix
 {
   packageOverrides = pkgs: rec {
