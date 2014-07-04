@@ -11,7 +11,7 @@ function build () {
 	build_hol_light_contexts.nix
 }
 
-for variant in test core multivariate complex gcs card sosa
+for variant in test core multivariate complex gcs card sosa hypercomplex
 do
     build $variant
 done

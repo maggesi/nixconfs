@@ -32,7 +32,7 @@ let blcr_selfdestruct filename bannerstring =
     variant,
     description ? "",
     load_script,
-    command ? "${toString cr_run} ocaml -I `ocamlfind query camlp5`"
+    initial_state ? "${toString cr_run} ocaml -I `ocamlfind query camlp5`"
   }: stdenv.mkDerivation {
     name = "hol_light_${variant}";
     inherit load_script;
@@ -43,7 +43,7 @@ let blcr_selfdestruct filename bannerstring =
       contextFile="$out/lib/hol_light/contexts/${variant}.context"
       echo "$load_script" >> "$loadScript"
       echo "blcr_selfdestruct \"$NIX_BUILD_TOP/hol.context\" \"${description}\";;" >> "$loadScript"
-      cat "$loadScript" | ${command} || true
+      cat "$loadScript" | ${initial_state} || true
       mv "$NIX_BUILD_TOP/hol.context" "$contextFile"
     '';
   };
@@ -73,7 +73,7 @@ in rec {
   hol_light_multivariate = mkVariant {
     variant = "multivariate";
     description = "Preloaded with multivariate analysis";
-    command = hol_light_core;
+    initial_state = hol_light_core;
     load_script = ''
       loadt "Multivariate/make.ml";
     '';
@@ -82,7 +82,7 @@ in rec {
   hol_light_complex = mkVariant {
     variant = "complex";
     description = "Preloaded with multivariate-based complex analysis";
-    command = hol_light_multivariate;
+    initial_state = hol_light_multivariate;
     load_script = ''
       loadt "Library/binomial.ml";;
       loadt "Library/iter.ml";;
@@ -96,22 +96,10 @@ in rec {
     '';
   };
 
-  hol_light_gcs = mkVariant {
-    variant = "gcs";
-    description = "Geometria Computazionale Simbolica 2013-2014";
-    command = hol_light_complex;
-    load_script = ''
-      loadt "${./gcs.hl}";;
-      prioritize_num();;
-      type_invention_error := true;;
-      ignore (search[`1`]);;
-    '';
-  };
-
   hol_light_sosa = mkVariant {
     variant = "sosa";
     description = "Preloaded with analysis and SOS";
-    command = hol_light_core;
+    initial_state = hol_light_core;
     load_script = ''
       loadt "Library/analysis.ml";;
       loadt "Library/transc.ml";;
@@ -122,7 +110,7 @@ in rec {
   hol_light_card = mkVariant {
     variant = "card";
     description = "Preloaded with cardinal arithmetic";
-    command = hol_light_core;
+    initial_state = hol_light_core;
     load_script = ''
       loadt "Library/card.ml";;
     '';
@@ -131,9 +119,34 @@ in rec {
   hol_light_test = mkVariant {
     variant = "test";
     description = "Just a cheap test of the checkpointing mechanism";
-    command = hol_light_core;
+    initial_state = hol_light_core;
     load_script = ''
       let foo = 1+1;;
     '';
   };
+
+  hol_light_gcs = mkVariant {
+    variant = "gcs";
+    description = "Geometria Computazionale Simbolica 2013-2014";
+    initial_state = hol_light_complex;
+    load_script = ''
+      loadt "${./gcs.hl}";;
+      prioritize_num();;
+      type_invention_error := true;;
+      ignore (search[`1`]);;
+    '';
+  };
+
+  hol_light_hypercomplex = mkVariant {
+    variant = "hypercomplex";
+    description = "Preloaded with complex analysis and quaternions";
+    initial_state = hol_light_complex;
+    load_script = ''
+      load_path := "${../../../HOL}" :: !load_path;;
+      Format.print_string (Sys.getcwd()); Format.print_newline();
+      loadt "Quaternions/make.hl";;
+      ignore (search[`1`]);;
+    '';
+  };
+
 }
