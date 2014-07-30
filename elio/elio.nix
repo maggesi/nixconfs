@@ -6,6 +6,9 @@
     #../modules/xen-domU.nix
   ];
 
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_4;
+
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];
 
@@ -28,6 +31,8 @@
       150.217.33.145 neve
     '';
   };
+
+  environment.blcr.enable = true;
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
