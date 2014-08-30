@@ -11,7 +11,14 @@ function build () {
 	build_hol_light_contexts.nix
 }
 
+function die () {
+    echo "Error building $1" 1>&2
+    echo "Abort" 1>&2
+    exit 1
+}
+
 for variant in test core multivariate complex gcs card sosa hypercomplex
 do
-    build $variant
+    build $variant || die $variant
+    echo "$variant built successfully"
 done
