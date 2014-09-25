@@ -8,7 +8,7 @@
   require =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <nixos/modules/programs/virtualbox.nix>
+      # <nixos/modules/programs/virtualbox.nix>
     ];
 
   boot.initrd.kernelModules =
@@ -17,19 +17,16 @@
       # "xfs" "ata_piix"
     ];
 
-  # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
-
-  # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
   # Needed for compatibility with the present version of BLCR
   boot.kernelPackages = pkgs.linuxPackages_3_4;
 
-  #hardware.enableAllFirmware = true;
+  hardware.enableAllFirmware = true;
 
-  networking.hostName = "neve"; # Define your hostname.
+  networking.hostName = "neve";
 
   networking.defaultMailServer.directDelivery = true;
   networking.defaultMailServer.hostName = "mail.math.unifi.it";
@@ -38,25 +35,10 @@
      prefixLength = 24;
   };
   networking.defaultGateway = "150.217.33.1";
-  networking.nameservers = [ "8.8.8.8" "150.217.33.11" ];
+  networking.nameservers = [ "150.217.1.32" "8.8.8.8" "150.217.33.11" ];
 
-  # Add filesystem entries for each partition that you want to see
-  # mounted at boot time.  This should include at least the root
-  # filesystem.
-  fileSystems =
-    [ { mountPoint = "/";
-	    label = "nixos";
-        #device = "/dev/disk/by-label/nixos";
-      }
-    ];
-
-  # List swap partitions activated at boot time.
-  swapDevices =
-    [ {
-	    #device = "/dev/disk/by-label/swap";
-	    label = "swap";
-	  }
-    ];
+  fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
+  swapDevices = [ { label = "swap"; } ];
 
   # Select internationalisation properties.
   i18n = {
@@ -80,8 +62,6 @@
   services.xserver.xkbOptions = "eurosign:e";
   services.xserver.desktopManager.default = "xfce";
 
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.kdm.enable = true;
   services.xserver.desktopManager.kde4.enable = true;
   services.xserver.desktopManager.xfce.enable = true;
 
@@ -90,8 +70,8 @@
 
   services.gpm.enable = true;
 
-  #services.openafsClient.enable = true;
-  #services.openafsClient.cellName = "math.unifi.it";
+  services.openafsClient.enable = true;
+  services.openafsClient.cellName = "math.unifi.it";
 
   security.setuidPrograms = [ "reboot" "halt" ];
 
@@ -100,6 +80,9 @@
   time.timeZone = "Europe/Rome";
 
   environment.blcr.enable = true;
+  #environment.blcr.debug = true;
+
+  environment.systemPackages = with pkgs; [ linuxPackages.perf ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -123,7 +106,4 @@
     }
   ];
   */
-
-  #virtualisation.xen.enable = true;
-  #virtualisation.xen.domain0MemorySize = 640;
 }

@@ -14,5 +14,5 @@
 
   nix.maxJobs = 4;
 
-  hardware.opengl.videoDrivers = [ "nvidia" ];
+  services.xserver.videoDrivers = [ "nvidia" ];
 }
