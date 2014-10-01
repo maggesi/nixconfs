@@ -21,7 +21,9 @@ let blcr_selfdestruct filename bannerstring =
     else longer_banner^"\n        "^bannerstring in
   let cr_checkpoint = "${toString cr_checkpoint}" in
   let command = cr_checkpoint^" --term -f "^filename^" $PPID" in
-  Gc.compact(); Unix.sleep 1;
+  ignore (search[`1`]);
+  Gc.compact();
+  Unix.sleep 1;
   Format.print_string "Checkpointing... "; Format.print_newline();
   (try ignore(Unix.system command) with Unix.Unix_error _ -> ());
   Format.print_string complete_banner; Format.print_newline();
@@ -38,21 +40,24 @@ let blcr_selfdestruct filename bannerstring =
     inherit load_script;
     buildInputs = [ ocaml camlp5 findlib ];
     buildCommand = ''
-      ensureDir "$out/lib/hol_light/contexts"
-      loadScript="$out/lib/hol_light/contexts/${variant}_load.ml"
-      contextFile="$out/lib/hol_light/contexts/${variant}.context"
+      contextDir="$out/lib/hol_light/contexts"
+      mkdir -p "$contextDir"
+      loadScript="$contextDir/${variant}_load.ml"
       echo "$load_script" >> "$loadScript"
-      echo "blcr_selfdestruct \"$NIX_BUILD_TOP/hol.context\" \"${description}\";;" >> "$loadScript"
+      echo "blcr_selfdestruct \"$NIX_BUILD_TOP/${variant}.context\" \"${description}\";;" >> "$loadScript"
       cat "$loadScript" | ${initial_state} || true
-      mv "$NIX_BUILD_TOP/hol.context" "$contextFile"
+      gzip "$NIX_BUILD_TOP/${variant}.context"
+      mv "$NIX_BUILD_TOP/${variant}.context.gz" "$contextDir"
     '';
   };
 
   mkRestartScript = variant: context:
     pkgs.writeScript "hol_light_${variant}" ''
       #!/bin/sh
-      exec ${cr_restart} --no-restore-pid \
-       ${context}/lib/hol_light/contexts/${variant}.context
+      tmpdir=$(mktemp --tmpdir -d "hol_light_${variant}_restart.XXXXXXXXXX")
+      trap 'rm -rf "$tmpdir"' EXIT INT TERM HUP
+      mkfifo "$tmpdir/pipe"
+      zcat ${context}/lib/hol_light/contexts/${variant}.context.gz > "$tmpdir/pipe" & exec ${cr_restart} --no-restore-pid -f "$tmpdir/pipe"
     '';
 
   mkVariant = arg: mkRestartScript arg.variant (mkContext arg);
@@ -133,7 +138,6 @@ in rec {
       loadt "${./gcs.hl}";;
       prioritize_num();;
       type_invention_error := true;;
-      ignore (search[`1`]);;
     '';
   };
 
@@ -145,7 +149,6 @@ in rec {
       load_path := "${../../../HOL}" :: !load_path;;
       Format.print_string (Sys.getcwd()); Format.print_newline();
       loadt "Quaternions/make.hl";;
-      ignore (search[`1`]);;
     '';
   };
 
