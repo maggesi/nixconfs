@@ -57,14 +57,23 @@
 
   nix.maxJobs = 1;
 
-  users.extraUsers =
-    [ { name = "maggesi";
-        description = "Marco Maggesi";
-        home = "/home/maggesi";
-        group = "users";
-        extraGroups = [ "wheel" ];
-        createHome = true;
-        useDefaultShell = true;
-      }
-    ];
+  users.extraUsers.maggesi =
+    { name = "maggesi";
+      description = "Marco Maggesi";
+      home = "/home/maggesi";
+      group = "users";
+      extraGroups = [ "wheel" ];
+      createHome = true;
+      useDefaultShell = true;
+    };
+
+  users.extraUsers.annex =
+    { createHome = true;
+      home = "/home/annex";
+      description = "Sharing account for git annex assistant";
+      # extraGroups = [ "wheel" ];
+      useDefaultShell = true;
+      openssh.authorizedKeys.keys = [
+        "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuaQkTZTJyRp24IsmdXUKCBr5XKSIyw3OYL1o2SMU1vKYrSIjpHSJ/7F1FwJa89HZVukuj1i0JQfUp08GITDG21YnsSJIkqa7+QdYPo9fwtcZX505shH0PYZg8PYbuxOb8VFHhi7/SJZd8GhuBHs+qwDijbIFXvM7Bnu1V5RlfI3RQ9kPxc2gEbrSO9l5qfdrelA03wLYOEsfG0X/wv6CkBex3n4BvTE6O+wmkz5FgkMUHvosooUC85ZpPOzOG3DUCnrazPKZpjyS35Abl7u+UG/iyoqDqDEXyFPPI82/dydtm99gdO/hlnH56Uwzi/d300ADSJDD44v8N96wmD4Pd marco.maggesi@gmail.com" ];
+    };
 }
