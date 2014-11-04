@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib camlp5 ];
 
+  patches = [ ./Makefile.patch ];
+
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
     cp -a  . $out/lib/hol_light
@@ -32,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice z77z ];
+    maintainers = with maintainers; [ thoughtpolice z77z vbgl ];
   };
 }
