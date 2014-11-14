@@ -67,6 +67,16 @@
       useDefaultShell = true;
     };
 
+  users.extraUsers.barlocco =
+    { name = "barlocco";
+      description = "Simone Barlocco";
+      home = "/home/maggesi";
+      group = "users";
+      extraGroups = [ "wheel" ];
+      createHome = true;
+      useDefaultShell = true;
+    };
+
   users.extraUsers.annex =
     { createHome = true;
       home = "/home/annex";
