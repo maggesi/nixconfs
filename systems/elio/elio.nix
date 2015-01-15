@@ -7,7 +7,7 @@
   ];
 
   # Needed for compatibility with the present version of BLCR
-  boot.kernelPackages = pkgs.linuxPackages_3_4;
+  # boot.kernelPackages = pkgs.linuxPackages_3_4;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];
@@ -23,13 +23,12 @@
     interfaces =
       [ { name = "eth0";
           ipAddress = "150.217.34.130";
-          subnetMask = "255.255.255.128";
+	  prefixLength = 25;
+          #subnetMask = "255.255.255.128";
         }
       ];
     defaultGateway = "150.217.34.129";
-    extraHosts = ''
-      150.217.33.145 neve
-    '';
+    extraHosts = "150.217.33.63 neve";
   };
 
   environment.blcr.enable = true;
