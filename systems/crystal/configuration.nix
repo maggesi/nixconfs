@@ -19,6 +19,8 @@
 
   environment.blcr.enable = true;
 
+  nix.extraOptions = "auto-optimise-store = true";
+
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.firefox.enableAdobeFlash = true;
   nixpkgs.config.chromium.enableAdobeFlash = true;
