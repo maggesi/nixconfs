@@ -22,7 +22,7 @@
   boot.loader.grub.device = "/dev/sda";
 
   # Needed for compatibility with the present version of BLCR
-  boot.kernelPackages = pkgs.linuxPackages_3_4;
+  # boot.kernelPackages = pkgs.linuxPackages_3_4;
 
   hardware.enableAllFirmware = true;
 
@@ -83,6 +83,8 @@
   #environment.blcr.debug = true;
 
   environment.systemPackages = with pkgs; [ linuxPackages.perf ];
+
+  nix.extraOptions = "auto-optimise-store = true";
 
   nixpkgs.config.allowUnfree = true;
 
