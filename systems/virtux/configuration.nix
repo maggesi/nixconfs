@@ -16,6 +16,8 @@
 
   boot.kernelPackages = pkgs.linuxPackages_3_4; # For BLCR 0.8.4
 
+  nix.extraOptions = "auto-optimise-store = true";
+
   # The follwoing kernel params are needed when VirtualBox Guest
   # Additions do not work to set up a convenient screen size (see
   # also below in the configuration of xorg).
