@@ -36,7 +36,9 @@
 
 (with-output-to-string
  (lambda ()
-   (run-nix-channel "--update")
-   (run-nix-collect-garbage "--delete-older-than" "60d")
-   (run-nix-env "--always" "-u" "*" "-b")
-   (run-nix-env "--always" "-u" "*" "--dry-run")))
+   #;(run-nix-channel "--update")
+   #;(run-nix-collect-garbage "--delete-older-than" "60d")
+   #;(run-nix-env "--always" "-u" "*" "-b" "--keep-going")
+   #;(run-nix-env "--always" "-u" "*" "--dry-run")
+   (run-nix-env "--always" "-u" "*")
+   ))
