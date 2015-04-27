@@ -10,12 +10,12 @@ in
 
 stdenv.mkDerivation rec {
   name     = "hol_light-${version}";
-  version  = "225";
+  version  = "226";
 
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
     rev = version;
-    sha256 = "1bpgdrxfcql8a6b5yqd0ls6fzc0d69515zx99xxlxy48lqgg4c17";
+    sha256 = "003yplj3n8na01y8zwbrxlnbhqr048bdmd6yy2l4im67f1zv1bk8";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
