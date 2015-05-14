@@ -2,16 +2,18 @@
 /* Configuration file for "virtux", virtualbox guest on "soyouz" MacBookPro  */
 /* ========================================================================= */
 
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 {
-  require =
+  imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
+  # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
+  # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
   boot.kernelPackages = pkgs.linuxPackages_3_4; # For BLCR 0.8.4
@@ -23,16 +25,15 @@
   # also below in the configuration of xorg).
   #boot.extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
 
-  fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
-  swapDevices = [ { label = "swap"; } ];
+  ### fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
+  ### swapDevices = [ { label = "swap"; } ];
 
   time.timeZone = "Europe/Rome";
 
-  networking = {
-    hostName = "virtux";
-    defaultMailServer.directDelivery = true;
-    defaultMailServer.hostName = "mail.math.unifi.it";
-  };
+  networking.hostName = "virtux";
+  networking.hostId = "04b63126";
+  networking.defaultMailServer.directDelivery = true;
+  networking.defaultMailServer.hostName = "mail.math.unifi.it";
 
   services = {
     gpm.enable = true;
