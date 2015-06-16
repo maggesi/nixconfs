@@ -85,6 +85,9 @@
   environment.systemPackages = with pkgs; [ linuxPackages.perf ];
 
   nix.extraOptions = "auto-optimise-store = true";
+  nix.gc.automatic = true;
+  nix.gc.dates = "13:15";
+  nix.gc.options = "--delete-older-than 60d";
 
   nixpkgs.config.allowUnfree = true;
 
