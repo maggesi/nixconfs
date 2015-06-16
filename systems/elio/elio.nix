@@ -55,6 +55,9 @@
   krb5.kerberosAdminServer = "kerberos.math.unifi.it";
 
   nix.maxJobs = 1;
+  nix.gc.automatic = true;
+  nix.gc.dates = "13:15";
+  nix.gc.options = "--delete-older-than 60d";
 
   users.extraUsers.maggesi =
     { name = "maggesi";
