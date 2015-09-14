@@ -5,7 +5,7 @@ let
   cr_restart = <blcr/cr_restart>;
   pkgs = import <nixpkgs> {};
   inherit (pkgs) stdenv ocamlPackages;
-  inherit (ocamlPackages) ocaml findlib;
+  inherit (ocamlPackages) ocaml;
   camlp5 = ocamlPackages.camlp5_strict;
 
   blcr_selfdestruct_ml = pkgs.writeText "blcr_selfdestruct.ml" ''
@@ -34,11 +34,11 @@ let blcr_selfdestruct filename bannerstring =
     variant,
     description ? "",
     load_script,
-    initial_state ? "${toString cr_run} ocaml -I `ocamlfind query camlp5`"
+    initial_state ? "${toString cr_run} ocaml -I `camlp5 -where`"
   }: stdenv.mkDerivation {
     name = "hol_light_${variant}";
     inherit load_script;
-    buildInputs = [ ocaml camlp5 findlib ];
+    buildInputs = [ ocaml camlp5 ];
     buildCommand = ''
       contextDir="$out/lib/hol_light/contexts"
       mkdir -p "$contextDir"

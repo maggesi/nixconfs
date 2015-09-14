@@ -19,7 +19,7 @@
 
     hol_light = with pkgs; import ../../pkgs/hol_light {
       inherit stdenv fetchsvn writeScript;
-      inherit (ocamlPackages) ocaml findlib;
+      inherit (ocamlPackages) ocaml;
       camlp5 = ocamlPackages.camlp5_strict;
     };
 
