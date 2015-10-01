@@ -70,7 +70,7 @@
 
   services.gpm.enable = true;
 
-  services.openafsClient.enable = true;
+  services.openafsClient.enable = false;
   services.openafsClient.cellName = "math.unifi.it";
 
   security.setuidPrograms = [ "reboot" "halt" ];
