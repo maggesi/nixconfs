@@ -16,7 +16,8 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
-  boot.kernelPackages = pkgs.linuxPackages_3_4; # For BLCR 0.8.4
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_14;
 
   nix.extraOptions = "auto-optimise-store = true";
 

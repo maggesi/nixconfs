@@ -7,7 +7,7 @@
   ];
 
   # Needed for compatibility with the present version of BLCR
-  # boot.kernelPackages = pkgs.linuxPackages_3_4;
+  boot.kernelPackages = pkgs.linuxPackages_3_14;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];

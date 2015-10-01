@@ -16,6 +16,9 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_14;
+
   networking.hostName = "crystal"; # Define your hostname.
   networking.hostId = "df5b437e";
   # networking.wireless.enable = true;  # Enables wireless.
