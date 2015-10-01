@@ -47,6 +47,13 @@
 
   services.postgresql.enable = false;
 
+  # Gitolite configuration
+  services.gitolite.user =  "git";
+  services.gitolite.dataDir = "/var/lib/gitolite";
+  services.gitolite.enable = true;
+  services.gitolite.adminPubkey =
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuaQkTZTJyRp24IsmdXUKCBr5XKSIyw3OYL1o2SMU1vKYrSIjpHSJ/7F1FwJa89HZVukuj1i0JQfUp08GITDG21YnsSJIkqa7+QdYPo9fwtcZX505shH0PYZg8PYbuxOb8VFHhi7/SJZd8GhuBHs+qwDijbIFXvM7Bnu1V5RlfI3RQ9kPxc2gEbrSO9l5qfdrelA03wLYOEsfG0X/wv6CkBex3n4BvTE6O+wmkz5FgkMUHvosooUC85ZpPOzOG3DUCnrazPKZpjyS35Abl7u+UG/iyoqDqDEXyFPPI82/dydtm99gdO/hlnH56Uwzi/d300ADSJDD44v8N96wmD4Pd marco.maggesi@gmail.com";
+
   time.timeZone = "Europe/Rome";
 
   #krb5.enable = true;
