@@ -19,6 +19,8 @@
   # Needed for compatibility with the present version of BLCR
   boot.kernelPackages = pkgs.linuxPackages_3_14;
 
+  time.timeZone = "Europe/Rome";
+
   nix.extraOptions = "auto-optimise-store = true";
 
   # The follwoing kernel params are needed when VirtualBox Guest

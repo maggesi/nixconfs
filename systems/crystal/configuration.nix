@@ -19,6 +19,10 @@
   # Needed for compatibility with the present version of BLCR
   boot.kernelPackages = pkgs.linuxPackages_3_14;
 
+  time.timeZone = "Europe/Rome";
+
+  nix.extraOptions = "auto-optimise-store = true";
+
   networking.hostName = "crystal"; # Define your hostname.
   networking.hostId = "df5b437e";
   # networking.wireless.enable = true;  # Enables wireless.
@@ -64,8 +68,6 @@
   # };
 
   environment.blcr.enable = true;
-
-  nix.extraOptions = "auto-optimise-store = true";
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.firefox.enableAdobeFlash = true;

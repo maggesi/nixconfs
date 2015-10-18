@@ -20,9 +20,9 @@ let blcr_selfdestruct filename bannerstring =
     if bannerstring = "" then longer_banner
     else longer_banner^"\n        "^bannerstring in
   let cr_checkpoint = "${toString cr_checkpoint}" in
-  let command = cr_checkpoint^" --term -f "^filename^" $PPID" in
-  ignore (search[`1`]);
+  let command = cr_checkpoint^" --term -f "^filename^" -p $PPID" in
   Gc.compact();
+  ignore (search[`1`]);
   Unix.sleep 1;
   Format.print_string "Checkpointing... "; Format.print_newline();
   (try ignore(Unix.system command) with Unix.Unix_error _ -> ());

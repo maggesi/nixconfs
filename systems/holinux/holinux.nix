@@ -11,7 +11,10 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";
-  boot.kernelPackages = pkgs.linuxPackages_3_4;
+  # Needed for compatibility with the present version of BLCR
+  boot.kernelPackages = pkgs.linuxPackages_3_14;
+
+  time.timeZone = "Europe/Rome";
 
   networking.hostName = "holinux";
 
@@ -36,5 +39,8 @@
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "holuser";
 
-  time.timeZone = "Europe/Rome";
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.firefox.enableAdobeFlash = true;
+  nixpkgs.config.chromium.enableAdobeFlash = true;
+
 }
