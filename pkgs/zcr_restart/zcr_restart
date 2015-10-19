@@ -1,0 +1,21 @@
+#!/bin/sh
+
+### ---------------------------------------------------------------------------
+### Description: Restart BLCR checkpoint gzipped contexts.
+###              Uses zcat to feed cr_restart trough a temporary unix pipe.
+###      Author: Marco Maggesi <maggesi@math.unifi.it>
+###       Usage: zcr_restart <gzipped-context>
+###       Notes: Needs Berkeley Lab Checkpoint/Restart (BLCR) on Linux.
+### ---------------------------------------------------------------------------
+
+context="$1"
+
+## Try to find a nice name for the temporary directory.
+bname=$(basename "$(basename "${context}" '.gz')" '.context')
+tmpdir=$(mktemp --tmpdir -d "zcr_restart-${bname}.XXXXX")
+pipe="$tmpdir/pipe"
+cr_restart=CR_RESTART_PATH
+
+trap 'rm -rf "$tmpdir"' EXIT INT TERM HUP
+mkfifo "$tmpdir/pipe"
+zcat "$context" > "$pipe" & "$cr_restart" --no-restore-pid -f "$pipe"

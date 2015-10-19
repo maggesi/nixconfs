@@ -1,13 +1,14 @@
 #!/bin/sh
 
 export SYSVER=$(uname -a)
+#export CURRENT_SYSTEM=$(readlink "/run/current-system")
 
 function build () {
     nix-build \
 	--show-trace \
-	-I "blcr=/run/current-system/sw/bin" \
-	-A hol_light_$1 \
-	-o ~/bin/hol_light_$1 \
+	-I blcr="/var/run/current-system/sw/bin" \
+	-A "hol_light_$1" \
+	-o ~/bin/"hol_light_$1" \
 	build_hol_light_contexts.nix
 }
 
@@ -17,8 +18,8 @@ function die () {
     exit 1
 }
 
-for variant in test core multivariate complex gcs card sosa hypercomplex
+for variant in core test multivariate complex gcs card sosa hypercomplex
 do
-    build $variant || die $variant
+    build "${variant}" || die $variant
     echo "$variant built successfully"
 done

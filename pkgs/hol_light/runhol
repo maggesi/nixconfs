@@ -1,0 +1,24 @@
+#!/bin/sh
+
+TMPDIR="/tmp"
+
+HOL_RESTART=$(mktemp "$TMPDIR/hol_cwd_command.XXXX")
+
+printf 'let () = ' > $HOL_RESTART
+printf 'let restart_cwd = "%q" in\n' "$(pwd)" >> $HOL_RESTART
+printf 'let restart_path = "%q" in\n' "${PATH}" >> $HOL_RESTART
+printf 'let restart_tmp = "%q" in\n' "${TMPDIR}" >> $HOL_RESTART
+
+cat >> $HOL_RESTART <<EOF
+let parent_dir = Filename.dirname restart_cwd in
+let new_path = Sys.getenv "PATH" ^ ":" ^ restart_path  in
+load_path := parent_dir :: !load_path;
+Sys.chdir restart_cwd;
+Unix.putenv "PATH" new_path;;
+EOF
+
+# Do not catch Ctrl-C (pass it down to HOL Light)
+trap "" SIGINT
+
+cat $HOL_RESTART - | hol_light_complex
+rm -f $HOL_RESTART

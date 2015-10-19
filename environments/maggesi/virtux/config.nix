@@ -29,10 +29,14 @@
       inherit stdenv fetchsvn writeScript;
       inherit (ocamlPackages) ocaml;
       camlp5 = ocamlPackages.camlp5_strict;
-   };
+    };
 
     holl_mode = with pkgs; import ../../../pkgs/holl-mode {
       inherit stdenv fetchurl emacs;
+    };
+
+    zcr_restart = with pkgs; import ../../../pkgs/zcr_restart {
+      inherit stdenv;
     };
   };
 }
