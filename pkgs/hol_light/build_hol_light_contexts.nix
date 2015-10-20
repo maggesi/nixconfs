@@ -71,14 +71,19 @@ let blcr_selfdestruct filename bannerstring =
   mkRestartScript = variant: context:
     pkgs.writeScript "hol_light_${variant}" ''
       #!/bin/sh
+      if [ -z "$TMPDIR" ]; then TMPDIR="/tmp"; fi 
       ZCR_RESTART="${zcr_restart}/bin/zcr_restart"
       CONTEXT="${context}"
       HOL_RESTART=$(mktemp --tmpdir "hol_cwd_command.XXXX")
       printf 'let () = ' > $HOL_RESTART
-      printf 'let restart_cwd = "%q" in\n' "$(pwd)" >> $HOL_RESTART
-      printf 'let restart_path = "%q" in\n' "$PATH}" >> $HOL_RESTART
+      printf 'let restart_cwd = "%q" in ' "$(pwd)" >> $HOL_RESTART
+      printf 'let restart_path = "%q" in ' "$PATH" >> $HOL_RESTART
+      printf 'Filename.set_temp_dir_name "%q"; ' "$TMPDIR" >> $HOL_RESTART
+      printf 'temp_path := "%q"; ' "$TMPDIR" >> $HOL_RESTART
+      printf 'Unix.putenv "TMPDIR" "%q"; ' "$TMPDIR" >> $HOL_RESTART
       cat >> $HOL_RESTART <<EOF
-      Format.printf "Setup restart environment.\n";
+      Format.print_string "Setup restart environment.";
+      Format.print_newline();
       let parent_dir = Filename.dirname restart_cwd in
       load_path := parent_dir :: !load_path;
       Sys.chdir restart_cwd;
