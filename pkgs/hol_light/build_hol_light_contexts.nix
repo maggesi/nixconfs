@@ -149,6 +149,22 @@ in rec {
     '';
   };
 
+  hol_light_full_conf = {
+    variant = "full";
+    description = "Full version";
+    initial_state =
+      "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_complex_context}\"";
+    load_script = ''
+      needs "Library/primitive.ml";;
+      needs "Library/prime.ml";;
+      needs "Library/integer.ml";;
+      needs "Examples/cooper.ml";;
+      needs "Examples/cong.ml";;
+      needs "Examples/reduct.ml";;
+      needs "Examples/sos.ml";;
+    '';
+  };
+
   hol_light_sosa_conf = {
     variant = "sosa";
     description = "Preloaded with analysis and SOS";
@@ -198,6 +214,7 @@ in rec {
   hol_light_test_context = mkContext hol_light_test_conf;
   hol_light_multivariate_context = mkContext hol_light_multivariate_conf;  
   hol_light_complex_context = mkContext hol_light_complex_conf;  
+  hol_light_full_context = mkContext hol_light_full_conf;
   hol_light_sosa_context = mkContext hol_light_sosa_conf;  
   hol_light_card_context = mkContext hol_light_card_conf;  
   hol_light_gcs_context = mkContext hol_light_gcs_conf;
@@ -207,6 +224,7 @@ in rec {
   hol_light_test = mkVariant hol_light_test_conf;
   hol_light_multivariate = mkVariant hol_light_multivariate_conf;  
   hol_light_complex = mkVariant hol_light_complex_conf;  
+  hol_light_full = mkVariant hol_light_full_conf;  
   hol_light_sosa = mkVariant hol_light_sosa_conf;  
   hol_light_card = mkVariant hol_light_card_conf;  
   hol_light_gcs = mkVariant hol_light_gcs_conf;
