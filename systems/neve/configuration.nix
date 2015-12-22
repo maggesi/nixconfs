@@ -73,6 +73,9 @@
   services.openafsClient.enable = false;
   services.openafsClient.cellName = "math.unifi.it";
 
+  services.ntp.enable = true;
+  services.ntp.servers = ["ntp.unifi.it"];
+
   security.setuidPrograms = [ "reboot" "halt" ];
 
   powerManagement.enable = true;
