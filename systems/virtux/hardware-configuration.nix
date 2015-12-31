@@ -8,7 +8,7 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" "ahci" ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
