@@ -31,8 +31,6 @@
   ### fileSystems = [ { label = "nixos"; mountPoint = "/"; } ];
   ### swapDevices = [ { label = "swap"; } ];
 
-  time.timeZone = "Europe/Rome";
-
   networking.hostName = "virtux";
   networking.hostId = "04b63126";
   networking.defaultMailServer.directDelivery = true;

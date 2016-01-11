@@ -9,18 +9,16 @@ let
 in
 
 stdenv.mkDerivation {
-  name     = "hol_light-2015-11-02";
+  name     = "hol_light-2015-12-21";
 
   src = fetchFromGitHub {
     owner  = "jrh13";
     repo   = "hol-light";
-    rev    = "10265313397476ddff4ce13e7bbb588025e7272c";
-    sha256 = "17b6a7vk9fhppl0h366y7pw6a9sknq1a8gxqg67dzqpb47vda1n0";
+    rev    = "a55975c9ba408fb15b84c49b8672ebeccf81114e";
+    sha256 = "1pjify9swb1ky7ybkd3bpr9syqrcc6y51l4gh16vid094sjb9b10";
   };
 
   buildInputs = [ ocaml camlp5 ];
-
-  patches = [ ./Makefile.patch ];
 
   installPhase = ''
     mkdir -p "$out/lib/hol_light" "$out/bin"
