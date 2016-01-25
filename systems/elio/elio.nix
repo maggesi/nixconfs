@@ -33,6 +33,14 @@
 
   environment.blcr.enable = true;
 
+  services.cron.enable = true;
+  services.cron.systemCronJobs =
+    [ "17 1 * * * obnam forget --config /root/.obnam.conf"
+      "27 4 * * * obnam backup --config /root/.obnam.conf"
+      "5 * * * * touch /tmp/ProvaCronJob"
+      "5 * * * * /usr/bin/env > /tmp/ProvaCronJob2"
+    ];
+
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
