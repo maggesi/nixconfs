@@ -27,7 +27,7 @@
   hardware.enableAllFirmware = true;
 
   networking.hostName = "neve";
-
+  networking.domain = "math.unifi.it";
   networking.defaultMailServer.directDelivery = true;
   networking.defaultMailServer.hostName = "mail.math.unifi.it";
   networking.interfaces.enp3s0 = {
@@ -93,6 +93,19 @@
   #environment.blcr.debug = true;
 
   environment.systemPackages = with pkgs; [ linuxPackages.perf ];
+  services.cron.enable = true;
+  services.cron.mailto = "marco.maggesi@gmail.com";
+  services.cron.systemCronJobs =
+    [ "37 12 * * * root obnam forget --config /root/.obnam.conf"
+      "57 1-23/2 * * * root obnam backup --config /root/.obnam.conf"
+    ];
+
+  environment.systemPackages =
+    with pkgs;
+      [ linuxPackages.perf
+        obnam
+	emacs
+      ];
 
   nix.extraOptions = "auto-optimise-store = true";
   nix.gc.automatic = true;
