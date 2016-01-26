@@ -23,7 +23,7 @@
     interfaces =
       [ { name = "eth0";
           ipAddress = "150.217.34.130";
-	  prefixLength = 25;
+          prefixLength = 25;
           #subnetMask = "255.255.255.128";
         }
       ];
@@ -39,6 +39,13 @@
     [ "17 5 * * * root obnam forget --config /root/.obnam.conf"
       "27 1-23/3 * * * root obnam backup --config /root/.obnam.conf"
     ];
+
+  environment.systemPackages =
+    with pkgs;
+      [ linuxPackages.perf
+        obnam
+        emacs
+      ];
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
