@@ -34,17 +34,19 @@
   environment.blcr.enable = true;
 
   services.cron.enable = true;
+  services.cron.mailto = "marco.maggesi@gmail.com";
   services.cron.systemCronJobs =
-    [ "17 1 * * * obnam forget --config /root/.obnam.conf"
-      "27 4 * * * obnam backup --config /root/.obnam.conf"
-      "5 * * * * touch /tmp/ProvaCronJob"
-      "5 * * * * /usr/bin/env > /tmp/ProvaCronJob2"
+    [ "17 5 * * * root obnam forget --config /root/.obnam.conf"
+      "27 1-23/3 * * * root obnam backup --config /root/.obnam.conf"
     ];
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
+
+  services.ntp.enable = true;
+  services.ntp.servers = ["ntp.unifi.it"];
 
   services.httpd.enable = true;
   services.httpd.adminAddr = "maggesi@math.unifi.it";
