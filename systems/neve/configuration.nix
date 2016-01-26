@@ -76,6 +76,13 @@
   services.ntp.enable = true;
   services.ntp.servers = ["ntp.unifi.it"];
 
+  services.wakeonlan.interfaces =
+    [ { interface = "eth0";
+        method = "password";
+        password = "13:05:19:71:31:41";
+      }
+    ];
+
   security.setuidPrograms = [ "reboot" "halt" ];
 
   powerManagement.enable = true;
