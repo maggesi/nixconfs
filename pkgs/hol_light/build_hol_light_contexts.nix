@@ -105,7 +105,7 @@ in rec {
       #use "make.ml";;
       let sysver = "${sysver}";;
       loadt "${blcr_selfdestruct_ml}";;
-      loadt "update_database.ml";;
+      loads "update_database.ml";;
     '';
   };
 
@@ -125,7 +125,7 @@ in rec {
     initial_state =
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_core_context}\"";
     load_script = ''
-      loadt "Multivariate/make.ml";
+      loads "Multivariate/make.ml";
       prioritize_num();;
     '';
   };
@@ -136,32 +136,16 @@ in rec {
     initial_state =
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_multivariate_context}\"";
     load_script = ''
-      loadt "Library/binomial.ml";;
-      loadt "Library/iter.ml";;
-      loadt "Multivariate/complexes.ml";;
-      loadt "Multivariate/canal.ml";;
-      loadt "Multivariate/transcendentals.ml";;
-      loadt "Multivariate/realanalysis.ml";;
-      loadt "Multivariate/moretop.ml";;
-      loadt "Multivariate/cauchy.ml";;
-      loadt "Multivariate/complex_database.ml";;
+      loads "Library/binomial.ml";;
+      loads "Library/iter.ml";;
+      loads "Multivariate/complexes.ml";;
+      loads "Multivariate/canal.ml";;
+      loads "Multivariate/transcendentals.ml";;
+      loads "Multivariate/realanalysis.ml";;
+      loads "Multivariate/moretop.ml";;
+      loads "Multivariate/cauchy.ml";;
+      loads "Multivariate/complex_database.ml";;
       prioritize_num();;
-    '';
-  };
-
-  hol_light_full_conf = {
-    variant = "full";
-    description = "Full version";
-    initial_state =
-      "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_complex_context}\"";
-    load_script = ''
-      needs "Library/primitive.ml";;
-      needs "Library/prime.ml";;
-      needs "Library/integer.ml";;
-      needs "Examples/cooper.ml";;
-      needs "Examples/cong.ml";;
-      needs "Examples/reduct.ml";;
-      needs "Examples/sos.ml";;
     '';
   };
 
@@ -171,9 +155,9 @@ in rec {
     initial_state =
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_core_context}\"";
     load_script = ''
-      loadt "Library/analysis.ml";;
-      loadt "Library/transc.ml";;
-      loadt "Examples/sos.ml";;
+      loads "Library/analysis.ml";;
+      loads "Library/transc.ml";;
+      loads "Examples/sos.ml";;
     '';
   };
 
@@ -183,7 +167,7 @@ in rec {
     initial_state =
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_core_context}\"";
     load_script = ''
-      loadt "Library/card.ml";;
+      loads "Library/card.ml";;
     '';
   };
 
@@ -205,7 +189,7 @@ in rec {
     initial_state =
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_complex_context}\"";
     load_script = ''
-      loadt "Quaternions/make.hl";;
+      loads "Quaternions/make.ml";;
       prioritize_num();;
     '';
   };
@@ -214,7 +198,6 @@ in rec {
   hol_light_test_context = mkContext hol_light_test_conf;
   hol_light_multivariate_context = mkContext hol_light_multivariate_conf;  
   hol_light_complex_context = mkContext hol_light_complex_conf;  
-  hol_light_full_context = mkContext hol_light_full_conf;
   hol_light_sosa_context = mkContext hol_light_sosa_conf;  
   hol_light_card_context = mkContext hol_light_card_conf;  
   hol_light_gcs_context = mkContext hol_light_gcs_conf;
@@ -224,7 +207,6 @@ in rec {
   hol_light_test = mkVariant hol_light_test_conf;
   hol_light_multivariate = mkVariant hol_light_multivariate_conf;  
   hol_light_complex = mkVariant hol_light_complex_conf;  
-  hol_light_full = mkVariant hol_light_full_conf;  
   hol_light_sosa = mkVariant hol_light_sosa_conf;  
   hol_light_card = mkVariant hol_light_card_conf;  
   hol_light_gcs = mkVariant hol_light_gcs_conf;
