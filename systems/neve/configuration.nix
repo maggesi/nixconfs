@@ -92,7 +92,6 @@
   environment.blcr.enable = true;
   #environment.blcr.debug = true;
 
-  environment.systemPackages = with pkgs; [ linuxPackages.perf ];
   services.cron.enable = true;
   services.cron.mailto = "marco.maggesi@gmail.com";
   services.cron.systemCronJobs =
