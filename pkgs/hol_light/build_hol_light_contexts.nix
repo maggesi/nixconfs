@@ -137,7 +137,6 @@ in rec {
       "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_multivariate_context}\"";
     load_script = ''
       loads "Library/binomial.ml";;
-      loads "Library/iter.ml";;
       loads "Multivariate/complexes.ml";;
       loads "Multivariate/canal.ml";;
       loads "Multivariate/transcendentals.ml";;
@@ -145,7 +144,6 @@ in rec {
       loads "Multivariate/moretop.ml";;
       loads "Multivariate/cauchy.ml";;
       loads "Multivariate/complex_database.ml";;
-      prioritize_num();;
     '';
   };
 
