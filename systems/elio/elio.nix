@@ -36,16 +36,11 @@
   services.cron.enable = true;
   services.cron.mailto = "marco.maggesi@gmail.com";
   services.cron.systemCronJobs =
-    [ "17 5 * * * root obnam forget --config /root/.obnam.conf"
-      "27 1-23/3 * * * root obnam backup --config /root/.obnam.conf"
+    [ "17    0/3 * * * root obnam forget --config /root/.obnam.conf"
+      "27 1-23/1 * * * root obnam backup --config /root/.obnam.conf"
     ];
 
-  environment.systemPackages =
-    with pkgs;
-      [ linuxPackages.perf
-        obnam
-        emacs
-      ];
+  environment.systemPackages = with pkgs; [ obnam emacs ];
 
   services.locate.enable = true;
   services.locate.period = "40 3 * * *";
