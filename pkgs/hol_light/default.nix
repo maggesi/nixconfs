@@ -9,13 +9,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name     = "hol_light-2016-02-22";
+  name     = "hol_light-2016-02-29";
 
   src = fetchFromGitHub {
     owner  = "jrh13";
     repo   = "hol-light";
-    rev    = "370a318e8d0c35471bd69ff81330aede46d01e47";
-    sha256 = "05151e488b4dfba0662ff5bb2cffeb0eb9a21af795fc80612164bea7f5965095";
+    rev    = "9247e9e300f0acc248f50cf437b52b29bb7a51d8";
+    sha256 = "f70cc109d0ebd8f8289d386dc86eca032fb330bdc93f1a330887c07d93223455";
   };
 
   buildInputs = [ ocaml camlp5 ];

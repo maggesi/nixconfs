@@ -24,6 +24,8 @@
   nix.extraOptions = "auto-optimise-store = true";
 
   networking.hostName = "crystal"; # Define your hostname.
+  # Workaround to fix the hostname pb "hostname -s"
+  networking.extraHosts = "127.0.0.1 crystal";
   networking.hostId = "df5b437e";
   # networking.wireless.enable = true;  # Enables wireless.
 
