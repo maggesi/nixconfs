@@ -36,8 +36,8 @@
   services.cron.enable = true;
   services.cron.mailto = "marco.maggesi@gmail.com";
   services.cron.systemCronJobs =
-    [ "17    0/3 * * * root obnam forget --config /root/.obnam.conf"
-      "27 1-23/1 * * * root obnam backup --config /root/.obnam.conf"
+    [ "17    0 * * * root obnam forget --config /root/.obnam.conf"
+      "27 1-23/6 * * * root obnam backup --config /root/.obnam.conf"
     ];
 
   environment.systemPackages = with pkgs; [ obnam emacs ];
