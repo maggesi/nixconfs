@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     url = "https://github.com/jrh13/hol-light/";
     rev = "ad866c479985d0c458dcb802ca16fc6fc18fb857";
     sha256 = "1yaf7rxgl1wb11njgh6k7r82whrykqlr6q1wpqsy5kg8rcjj1xrn";
-  }
+  };
 
   buildInputs = [ ocaml camlp5 ];
 
