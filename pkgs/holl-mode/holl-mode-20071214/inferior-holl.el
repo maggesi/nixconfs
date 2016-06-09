@@ -1,7 +1,7 @@
 ;;; inferior-holl.el --- Run an inferior HOL-Light process.
 ;;; Version: 2006-09
 ;;; Copyright (C) Marco Maggesi (http://www.math.unifi.it/~maggesi/)
-;;; Compatibility: Emacs21
+;;; Compatibility: Emacs24
 
 ;; LICENCE:
 ;;
@@ -36,7 +36,7 @@
   :type 'hook
   :group 'holl)
 
-(defcustom holl-program-name "hol"
+(defcustom holl-program-name "hol_light"
   "*How HOL-Light is invoked."
   :type 'string
   :group 'holl)
@@ -44,15 +44,24 @@
 (defvar inferior-holl-mode-map
   (let ((m (make-sparse-keymap)))
     (define-key m "\C-c\C-r" 'holl-send-region)
-    (define-key m "\C-c\C-p" 'holl-send-print)
+    (define-key m "\C-c\C-e" 'holl-send-phrase)
+    (define-key m "\C-c\C-g" 'holl-send-goal)
+    (define-key m "\C-c\C-t" 'holl-send-tactic)
+    (define-key m "\C-c\C-l" 'holl-send-tactic-line)
     (define-key m "\C-c\C-b" 'holl-send-backup)
+    (define-key m "\C-c\C-p" 'holl-send-print)
     m))
 
 ;; Install the process communication commands in the holl-mode keymap.
 (define-key holl-mode-map [(meta return)] 'holl-send-phrase)
-(define-key holl-mode-map "\C-c\C-r" 'holl-send-region)
 (define-key holl-mode-map "\C-c\C-i" 'holl-display-inferior)
+(define-key holl-mode-map "\C-c\C-r" 'holl-send-region)
+(define-key holl-mode-map "\C-c\C-e" 'holl-send-phrase)
+(define-key holl-mode-map "\C-c\C-g" 'holl-send-goal)
+(define-key holl-mode-map "\C-c\C-t" 'holl-send-tactic)
+(define-key holl-mode-map "\C-c\C-l" 'holl-send-tactic-line)
 (define-key holl-mode-map "\C-c\C-b" 'holl-send-backup)
+(define-key holl-mode-map "\C-c\C-p" 'holl-send-print)
 
 (defvar holl-buffer nil "*The current holl process buffer.")
 
@@ -72,11 +81,19 @@ The following commands are available:
 \\{inferior-holl-mode-map}
 "
   ;; Customise in inferior-holl-mode-hook
+  ;; (electric-indent-local-mode -1)
   (setq comint-prompt-regexp "^# ?")
   (holl-mode-variables)
   (setq mode-line-process '(":%s"))
-  (set (make-local-variable 'font-lock-defaults) '(holl-font-lock-keywords))
+  (setq font-lock-defaults `(,holl-font-lock-keywords))
+  (add-hook (make-local-variable 'comint-preoutput-filter-functions)
+	    'holl-inferior-sanitize-output)
   )
+
+(defun holl-inferior-sanitize-output (str)
+  (replace-regexp-in-string "^maybe you forgot a `;'$"
+			    "maybe you forgot a ;"
+			    str))
 
 (defun holl-args-to-list (string)
   (let ((where (string-match "[ \t]" string)))
@@ -84,7 +101,7 @@ The following commands are available:
 	  ((not (= where 0))
 	   (cons (substring string 0 where)
 		 (holl-args-to-list (substring string (+ 1 where)
-						 (length string)))))
+					       (length string)))))
 	  (t (let ((pos (string-match "[^ \t]" string)))
 	       (if (null pos)
 		   nil
@@ -170,9 +187,84 @@ select the buffer"
   (comint-send-region (holl-proc) start end)
   (holl-display-inferior nil))
 
+(defun holl-send-line ()
+  "Send the current line to the inferior HOL-Light process."
+  (interactive)
+  (save-excursion
+    (beginning-of-line)
+    (let ((start (point)))
+      (end-of-line)
+      (holl-send-region start (point))
+      (holl-send-string "\n"))))
+
+(defun holl-send-tactic ()
+  (interactive)
+  (save-excursion
+    (re-search-backward "\\`\\|^[[:space:]]*?\\(\n[[:space:]]*\\)")
+    (goto-char (match-end 0))
+    (re-search-forward
+     (concat "\\(\\(?:.*\n\\)*?\\(?:.*?\\)\\)"
+	     "[[:space:]]*\\(:?THENL?\\)?"
+	     "[[:space:]]*\\[?[[:space:]]*"
+	     "\\(\\'\\|\n\\(\\'\\|[[:space:]]*?$\\)\\)"))
+    (holl-send-string "e(")
+    (holl-send-string (match-string 1))
+    (holl-send-string ");;\n"))
+  (goto-char (match-end 0)))
+
+(defun holl-send-tactic-line ()
+  "Send current line as a tactic.   Skips initial open brackets
+ [ and trailing THEN and THENL."
+  (interactive)
+  (back-to-indentation)
+  (skip-chars-forward "[")
+  (let ((start (point)))
+    (re-search-forward "[ \t]*\\(THENL?\\)?[ \t]*$"
+		       (line-end-position) t)
+    (holl-send-string "e (")
+    (holl-send-region start (match-beginning 0))
+    (holl-send-string ");;\n")
+    (forward-line)
+    ))
+
 (defun holl-send-string (string)
   "Send a string to the inferior HOL-Light process."
   (comint-send-string (holl-proc) string))
+
+(defun holl-send-tactic ()
+  (interactive)
+  (save-excursion
+    (re-search-backward "\\`\\|^[[:space:]]*?\\(\n[[:space:]]*\\)")
+    (goto-char (match-end 0))
+    (re-search-forward
+     (concat "\\(\\(?:.*\n\\)*?"
+	     "\\(?:.*?\\)\\)"
+	     "[[:space:]]*\\(:?THENL?\\)?"
+	     "[[:space:]]*?\\[?[[:space:]]*?"
+	     "\n[[:space:]]*?$"))
+    (holl-send-string "e(")
+    (holl-send-string (match-string 1))
+    (holl-send-string ");;\n"))
+  (goto-char (match-end 1)))
+
+(defun holl-send-goal ()
+  "\
+Send the quoted term around point as a new goal to HOL.  Move
+point at the end of the term (after the quote) and return the
+position.  Raise an error if the point is not inside a quoted
+term.
+"
+  (interactive)
+  (let ((end
+	 (save-excursion
+	   (when (holl-mark-term)
+	     (holl-send-string "g ")
+	     (holl-send-region (point) (mark))
+	     (holl-send-string ";;\n")
+	     (mark)))))
+    (if end
+	(goto-char end)
+      (error "Not inside a quoted HOL term"))))
 
 (defun holl-send-phrase ()
   "Send phrase at point to the HOL-Light process."
