@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -52,6 +52,8 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  # 2016-07-17: Workaround for VirtuabBox bug
+  services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
