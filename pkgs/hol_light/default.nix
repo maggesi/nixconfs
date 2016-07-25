@@ -9,12 +9,12 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-2016-07-11";
+  name = "hol_light-2016-07-23";
 
   src = fetchgit {
     url = "https://github.com/jrh13/hol-light/";
-    rev = "747a90be79b1edaf5167bf00dd0a347d2d397d8d";
-    sha256 = "0kxhzvvmjs1s4fpkhrvda0lrv4dp5dg6mrhnxww8inh10kl57bpn";
+    rev = "67cff936dda719f0e0ee57ab9d07c779ff664660";
+    sha256 = "0r85ifdvsvk2cdv7s4a0kf9ha6jdznqmz7swvp577f8r182klr28";
   };
 
   buildInputs = [ ocaml camlp5 ];
