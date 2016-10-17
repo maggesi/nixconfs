@@ -35,7 +35,7 @@
      prefixLength = 24;
   };
   networking.defaultGateway = "150.217.33.1";
-  networking.nameservers = [ "150.217.1.32" "8.8.8.8" "150.217.33.11" ];
+  networking.nameservers = [ "150.217.33.1" "150.217.1.32" "8.8.8.8" "150.217.33.11" ];
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { label = "swap"; } ];
@@ -66,7 +66,7 @@
   services.xserver.desktopManager.xfce.enable = true;
 
   services.locate.enable = true;
-  services.locate.period = "40 3 * * *";
+  services.locate.interval = "4hours";
 
   services.gpm.enable = true;
 
