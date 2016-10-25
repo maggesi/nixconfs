@@ -50,9 +50,9 @@
   services.ntp.enable = true;
   services.ntp.servers = ["ntp.unifi.it"];
 
-  services.httpd.enable = true;
-  services.httpd.adminAddr = "maggesi@math.unifi.it";
-  services.httpd.documentRoot = "/home/maggesi/public_html";
+  #services.httpd.enable = true;
+  #services.httpd.adminAddr = "maggesi@math.unifi.it";
+  #services.httpd.documentRoot = "/home/maggesi/public_html";
 
   #services.openafsClient.enable = true;
   services.openafsClient.cellName = "math.unifi.it";
