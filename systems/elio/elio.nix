@@ -1,13 +1,31 @@
 { config, pkgs, modulesPath, ... }:
 
-{
+let
+
+  custom_kernel = with pkgs; rec {
+
+    linux_3_14 = callPackage ../../pkgs/linux/linux-3.14.nix {
+      kernelPatches = [ kernelPatches.bridge_stp_helper ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
+    };
+
+    linuxPackages_3_14 =
+      recurseIntoAttrs (linuxPackagesFor linux_3_14 linuxPackages_3_14);
+  };
+
+in {
+
   require = [
     "${modulesPath}/virtualisation/xen-domU.nix"
     #../modules/xen-domU.nix
   ];
 
   # Needed for compatibility with the present version of BLCR
-  boot.kernelPackages = pkgs.linuxPackages_3_14;
+  boot.kernelPackages = custom_kernel.linuxPackages_3_14;
 
   fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
   swapDevices = [ { device = "/dev/xvda1"; } ];
@@ -43,7 +61,7 @@
   environment.systemPackages = with pkgs; [ obnam emacs ];
 
   services.locate.enable = true;
-  services.locate.period = "40 3 * * *";
+  #services.locate.interval = "02:14"; #default
   services.openssh.enable = true;
   services.openssh.allowSFTP = true;
 
@@ -58,6 +76,12 @@
   services.openafsClient.cellName = "math.unifi.it";
 
   services.postgresql.enable = false;
+
+/*
+  services.ihaskell.enable = true;
+  services.ihaskell.extraPackages =
+    haskellPackages: [ haskellPackages.wreq haskellPackages.lens ];
+*/
 
   # Gitolite configuration
   services.gitolite.user =  "git";
@@ -93,16 +117,6 @@
   users.extraUsers.maggesi =
     { name = "maggesi";
       description = "Marco Maggesi";
-      home = "/home/maggesi";
-      group = "users";
-      extraGroups = [ "wheel" ];
-      createHome = true;
-      useDefaultShell = true;
-    };
-
-  users.extraUsers.barlocco =
-    { name = "barlocco";
-      description = "Simone Barlocco";
       home = "/home/maggesi";
       group = "users";
       extraGroups = [ "wheel" ];
