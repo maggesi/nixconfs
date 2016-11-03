@@ -35,6 +35,7 @@ in {
   boot.loader.grub.device = "/dev/sda";
 
   # Needed for compatibility with the present version of BLCR
+  # boot.kernelPackages = pkgs.linuxPackages_3_14;
   boot.kernelPackages = custom_kernel.linuxPackages_3_14;
 
   time.timeZone = "Europe/Rome";
