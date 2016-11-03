@@ -1,7 +1,8 @@
 #!/bin/sh
 
-export SYSVER=$(uname -a)
-#export CURRENT_SYSTEM=$(readlink "/run/current-system")
+### Avoid uname -a prints the host nodename
+#export SYSVER=$(uname -a)
+export SYSVER=$(uname -smrvo)
 
 function build () {
     nix-build \
