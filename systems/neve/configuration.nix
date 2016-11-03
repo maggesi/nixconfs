@@ -4,7 +4,25 @@
 
 { pkgs, config, ...}:
 
-{
+let
+
+  custom_kernel = with pkgs; rec {
+
+    linux_3_14 = callPackage ../../pkgs/linux/linux-3.14.nix {
+      kernelPatches = [ kernelPatches.bridge_stp_helper ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
+    };
+
+    linuxPackages_3_14 =
+      recurseIntoAttrs (linuxPackagesFor linux_3_14 linuxPackages_3_14);
+  };
+
+in {
+
   require =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -22,7 +40,8 @@
   boot.loader.grub.device = "/dev/sda";
 
   # Needed for compatibility with the present version of BLCR
-  boot.kernelPackages = pkgs.linuxPackages_3_14;
+  # boot.kernelPackages = pkgs.linuxPackages_3_14;
+  boot.kernelPackages = custom_kernel.linuxPackages_3_14;
 
   hardware.enableAllFirmware = true;
 
