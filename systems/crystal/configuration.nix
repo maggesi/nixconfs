@@ -39,7 +39,11 @@ in {
 
   time.timeZone = "Europe/Rome";
 
-  nix.extraOptions = "auto-optimise-store = true";
+  nix.trustedUsers = [ "root" "maggesi" "@wheel" ];
+  nix.extraOptions = ''
+      ssh-substituter-hosts = nix-ssh@elio.math.unifi.it
+      auto-optimise-store = true
+    '';
 
   networking.hostName = "crystal"; # Define your hostname.
   # Workaround to fix the hostname pb "hostname -s"
