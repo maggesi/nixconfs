@@ -128,6 +128,7 @@ in {
   nix.gc.automatic = true;
   nix.gc.dates = "13:15";
   nix.gc.options = "--delete-older-than 60d";
+  nix.trustedUsers = [ "root" "maggesi" "@wheel" ];
   nix.extraOptions = ''
       ssh-substituter-hosts = nix-ssh@elio.math.unifi.it
       auto-optimise-store = true
