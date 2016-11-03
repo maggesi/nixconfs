@@ -125,10 +125,13 @@ in {
 	emacs
       ];
 
-  nix.extraOptions = "auto-optimise-store = true";
   nix.gc.automatic = true;
   nix.gc.dates = "13:15";
   nix.gc.options = "--delete-older-than 60d";
+  nix.extraOptions = ''
+      ssh-substituter-hosts = nix-ssh@elio.math.unifi.it
+      auto-optimise-store = true
+    '';
 
   nixpkgs.config.allowUnfree = true;
 
