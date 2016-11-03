@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
-import /home/maggesi/Devel/nixpkgs/pkgs/os-specific/linux/kernel/generic.nix (args // rec {
+import <nixpkgs/pkgs/os-specific/linux/kernel/generic.nix> (args // rec {
   version = "3.14.77";
   extraMeta.branch = "3.14";
 
