@@ -31,6 +31,17 @@
       camlp5 = ocamlPackages.camlp5_strict;
     };
 
+    coq_hott = with pkgs; import ../../../pkgs/coq {
+      inherit stdenv fetchgit pkgconfig ncurses;
+      inherit (ocamlPackages) ocaml findlib lablgtk;
+      camlp5 = ocamlPackages.camlp5_transitional;
+    };
+
+    hott = with pkgs; import ../../../pkgs/hott {
+      inherit stdenv fetchgit;
+      coq = coq_hott;
+    };
+
     holl_mode = with pkgs; import ../../../pkgs/holl-mode {
       inherit stdenv fetchurl emacs;
     };
