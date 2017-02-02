@@ -1,3 +1,7 @@
+/* ========================================================================= */
+/* Configuration file for "crystal", virtualbox guest on "mir" MacBookPro    */
+/* ========================================================================= */
+
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
@@ -46,11 +50,19 @@ in {
       auto-optimise-store = true
     '';
 
-  networking.hostName = "crystal"; # Define your hostname.
+  # The follwoing kernel params are needed when VirtualBox Guest
+  # Additions do not work to set up a convenient screen size (see
+  # also below in the configuration of xorg).
+  #boot.extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
+
+  networking.hostName = "crystal";
   # Workaround to fix the hostname pb "hostname -s"
   networking.extraHosts = "127.0.0.1 crystal";
   networking.hostId = "df5b437e";
-  # networking.wireless.enable = true;  # Enables wireless.
+  # networking.wireless.enable = true;
+
+  networking.defaultMailServer.directDelivery = true;
+  networking.defaultMailServer.hostName = "mail.math.unifi.it";
 
   # Select internationalisation properties.
   # i18n = {
@@ -73,10 +85,18 @@ in {
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
+  # services.locate.enable = true;
+  # services.locate.period = "40 3 * * *";
+
+  # services.gpm.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   # 2016-07-17: Workaround for VirtuabBox bug
   services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
+
+  services.xserver.exportConfiguration = true;
+
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
@@ -84,9 +104,22 @@ in {
   # services.xserver.displayManager.kdm.enable = true;
   # services.xserver.desktopManager.kde4.enable = true;
 
+  # Enable the XFCE Desktop Environment.
+  services.xserver.desktopManager.default = "xfce";
+  services.xserver.desktopManager.xfce.enable = true;
+
+  # Enable Display Manager.
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "maggesi";
-  services.xserver.desktopManager.xfce.enable = true;
+
+  services.xserver.driSupport = true;
+
+  environment.blcr.enable = true;
+
+  security = {
+    setuidPrograms = [ "reboot" "halt" ];
+    sudo.enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.extraUsers.guest = {
@@ -94,10 +127,20 @@ in {
   #   uid = 1000;
   # };
 
-  environment.blcr.enable = true;
+  users.extraUsers = [
+    { description = "Marco Maggesi";
+      name = "maggesi";
+      group = "users";
+      extraGroups = [ "wheel"] ;
+      useDefaultShell = true;
+      home = "/home/maggesi";
+      createHome = true;
+    }
+  ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.firefox.enableAdobeFlash = true;
   nixpkgs.config.chromium.enableAdobeFlash = true;
 
+  powerManagement.enable = true;
 }
