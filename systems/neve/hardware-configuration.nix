@@ -8,23 +8,21 @@
     [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
     ];
 
-  boot.initrd.kernelModules = [ "uhci_hcd" "ehci_hcd" "ehci_pci" "ata_piix" "firewire_ohci" "usb_storage" ];
+  boot.initrd.kernelModules =
+    [ "uhci_hcd" "ehci_hcd" "ehci_pci" "ata_piix"
+      "firewire_ohci" "usb_storage"
+    ];
 
-  boot.initrd.availableKernelModules = [ "uhci_hcd" "ehci_hcd" "ehci_pci" "ata_piix" "firewire_ohci" "usb_storage" ];
+  boot.initrd.availableKernelModules =
+    [ "uhci_hcd" "ehci_hcd" "ehci_pci" "ata_piix"
+      "firewire_ohci" "usb_storage" ];
   
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-/*
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/1ed9e435-3be9-4907-8957-303ac3c1e222";
-      fsType = "ext4";
-    };
+  fileSystems = [ { mountPoint = "/"; label = "nixos"; } ];
+  swapDevices = [ { label = "swap"; } ];
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/fe3e2408-78c4-4b1c-827b-5b58682b938c"; }
-    ];
-*/
 
   nix.maxJobs = 4;
 
