@@ -60,7 +60,7 @@ in {
   networking.extraHosts = "127.0.0.1 neve";
   networking.domain = "math.unifi.it";
 
-  networking.interfaces.enp3s0 = {
+  networking.interfaces.en33 = {
      ipAddress = "150.217.33.63";
      prefixLength = 24;
   };
