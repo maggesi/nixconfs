@@ -4,9 +4,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [ <nixpkgs/nixos/modules/installer/scan/not-detected.nix>
-    ];
+  imports = [ ];
 
   boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" ];
   boot.kernelModules = [ ];
@@ -17,10 +15,25 @@
       fsType = "ext4";
     };
 
+  fileSystems."/media/sf_Dropbox" =
+    { device = "Dropbox";
+      fsType = "vboxsf";
+    };
+
+  fileSystems."/media/sf_Shared" =
+    { device = "Shared";
+      fsType = "vboxsf";
+    };
+
+  fileSystems."/media/sf_Thing" =
+    { device = "Thing";
+      fsType = "vboxsf";
+    };
+
   swapDevices =
     [ { device = "/dev/disk/by-uuid/7b5b96a4-5e0a-40db-aa55-cd0a34d8629c"; }
     ];
 
-  nix.maxJobs = 1;
+  nix.maxJobs = lib.mkDefault 1;
   virtualisation.virtualbox.guest.enable = true;
 }

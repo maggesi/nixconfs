@@ -38,11 +38,12 @@ in {
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda";
 
+  networking.hostName = "crystal";
+  networking.hostId = "df5b437e";
+
   # Needed for compatibility with the present version of BLCR
   # boot.kernelPackages = pkgs.linuxPackages_3_14;
   boot.kernelPackages = custom_kernel.linuxPackages_3_14;
-
-  time.timeZone = "Europe/Rome";
 
   nix.trustedUsers = [ "root" "maggesi" "@wheel" ];
   nix.extraOptions = ''
@@ -55,10 +56,8 @@ in {
   # also below in the configuration of xorg).
   #boot.extraKernelParams = ["vga=0x200 | 0x160" "vga=864"];
 
-  networking.hostName = "crystal";
   # Workaround to fix the hostname pb "hostname -s"
-  networking.extraHosts = "127.0.0.1 crystal";
-  networking.hostId = "df5b437e";
+  # networking.extraHosts = "127.0.0.1 crystal";
   # networking.wireless.enable = true;
 
   networking.defaultMailServer.directDelivery = true;
@@ -66,10 +65,13 @@ in {
 
   # Select internationalisation properties.
   # i18n = {
-  #   consoleFont = "lat9w-16";
+  #   consoleFont = "Lat2-Terminus16";
   #   consoleKeyMap = "us";
   #   defaultLocale = "en_US.UTF-8";
   # };
+
+  # Set your time zone.
+  time.timeZone = "Europe/Rome";
 
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -92,8 +94,9 @@ in {
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+
   # 2016-07-17: Workaround for VirtuabBox bug
-  services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
+  # services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
 
   services.xserver.exportConfiguration = true;
 
@@ -112,7 +115,7 @@ in {
   services.xserver.displayManager.auto.enable = true;
   services.xserver.displayManager.auto.user = "maggesi";
 
-  services.xserver.driSupport = true;
+  # hardware.opengl.driSupport = true;
 
   environment.blcr.enable = true;
 
@@ -139,8 +142,12 @@ in {
   ];
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.firefox.enableAdobeFlash = true;
-  nixpkgs.config.chromium.enableAdobeFlash = true;
+  # nixpkgs.config.firefox.enableAdobeFlash = true;
+  # nixpkgs.config.chromium.enableAdobeFlash = true;
 
-  powerManagement.enable = true;
+  # powerManagement.enable = true;
+
+  # The NixOS release to be compatible with for stateful data such as databases.
+  system.stateVersion = "16.09";
+
 }
