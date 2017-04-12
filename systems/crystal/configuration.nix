@@ -40,6 +40,8 @@ in {
 
   networking.hostName = "crystal";
   networking.hostId = "df5b437e";
+  # Workaround to fix the hostname pb "hostname -s"
+  networking.extraHosts = "127.0.0.1 crystal";
 
   # Needed for compatibility with the present version of BLCR
   # boot.kernelPackages = pkgs.linuxPackages_3_14;
