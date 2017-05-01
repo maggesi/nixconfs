@@ -6,7 +6,7 @@
 {
   imports = [ ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_pci" ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "ohci_hcd" ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
 
