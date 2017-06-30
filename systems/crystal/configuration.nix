@@ -8,7 +8,24 @@
 
 { config, pkgs, lib, ... }:
 
-{
+let
+
+  custom_kernel = with pkgs; rec {
+
+    linux_3_14 = callPackage ../../pkgs/linux/linux-3.14.nix {
+      kernelPatches = [ kernelPatches.bridge_stp_helper ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
+    };
+
+    linuxPackages_3_14 =
+      recurseIntoAttrs (linuxPackagesFor linux_3_14 linuxPackages_3_14);
+  };
+
+in {
 
   imports =
     [ # Include the results of the hardware scan.
@@ -27,7 +44,8 @@
   networking.extraHosts = "127.0.0.1 crystal";
 
   # Needed for compatibility with the present version of BLCR
-  boot.kernelPackages = pkgs.linuxPackages_3_10;
+  # boot.kernelPackages = pkgs.linuxPackages_3_14;
+  boot.kernelPackages = custom_kernel.linuxPackages_3_14;
 
   nix.trustedUsers = [ "root" "maggesi" "@wheel" ];
   nix.extraOptions = ''
@@ -80,7 +98,7 @@
   services.xserver.enable = true;
 
   # 2016-07-17: Workaround for VirtuabBox bug
-  services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
+  # services.xserver.videoDrivers = lib.mkOverride 50 [ "virtualbox" "modesetting" ];
 
   services.xserver.exportConfiguration = true;
 
@@ -103,8 +121,10 @@
 
   environment.blcr.enable = true;
 
-  security.sudo.enable = true;
-  # security.wrappers = [ "reboot" "halt" ];
+  security = {
+    setuidPrograms = [ "reboot" "halt" ];
+    sudo.enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.extraUsers.guest = {
