@@ -119,6 +119,18 @@ in rec {
     '';
   };
 
+  hol_light_algebra_conf = {
+    variant = "algebra";
+    description = "Preloaded with algebra";
+    initial_state =
+      "\"${zcr_restart}/bin/zcr_restart\" \"${hol_light_core_context}\"";
+    load_script = ''
+      loads "Library/rstc.ml";
+      loads "Library/grouptheory.ml";
+      prioritize_num();;
+    '';
+  };
+
   hol_light_multivariate_conf = {
     variant = "multivariate";
     description = "Preloaded with multivariate analysis";
@@ -194,6 +206,7 @@ in rec {
 
   hol_light_core_context = mkContext hol_light_core_conf;
   hol_light_test_context = mkContext hol_light_test_conf;
+  hol_light_algebra_context = mkContext hol_light_algebra_conf;
   hol_light_multivariate_context = mkContext hol_light_multivariate_conf;  
   hol_light_complex_context = mkContext hol_light_complex_conf;  
   hol_light_sosa_context = mkContext hol_light_sosa_conf;  
@@ -203,6 +216,7 @@ in rec {
 
   hol_light_core = mkVariant hol_light_core_conf;
   hol_light_test = mkVariant hol_light_test_conf;
+  hol_light_algebra = mkVariant hol_light_algebra_conf;
   hol_light_multivariate = mkVariant hol_light_multivariate_conf;  
   hol_light_complex = mkVariant hol_light_complex_conf;  
   hol_light_sosa = mkVariant hol_light_sosa_conf;  
