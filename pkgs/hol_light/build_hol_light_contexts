@@ -19,7 +19,8 @@ function die () {
     exit 1
 }
 
-for variant in core test algebra multivariate complex gcs card sosa hypercomplex
+for variant in core test multivariate hypercomplex
+# for variant in core test algebra multivariate complex gcs card sosa hypercomplex
 do
     build "${variant}" || die $variant
     echo "$variant built successfully"
