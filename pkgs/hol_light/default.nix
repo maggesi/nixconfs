@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, writeScript, ocaml, camlp5 }:
+{ stdenv, fetchFromGitHub, ocaml, camlp5 }:
 
 let
   start_script = ''
@@ -11,8 +11,9 @@ in
 stdenv.mkDerivation {
   name = "hol_light-2018-09-30";
 
-  src = fetchgit {
-    url = https://github.com/jrh13/hol-light/;
+  src = fetchFromGitHub {
+    owner  = "jrh13";
+    repo   = "hol-light";
     rev = "27e09dd27834de46e917057710e9d8ded51a4c9f";
     sha256 = "1p0rm08wnc2lsrh3xzhlq3zdhzqcv1lbqnkwx3aybrqhbg1ixc1d";
   };

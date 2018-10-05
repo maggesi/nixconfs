@@ -18,7 +18,7 @@
       };
 
     hol_light = with pkgs; import ../../pkgs/hol_light {
-      inherit stdenv fetchgit writeScript;
+      inherit stdenv fetchFromGitHub;
       inherit (ocamlPackages) ocaml;
       camlp5 = ocamlPackages.camlp5_strict;
     };
